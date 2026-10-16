@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>سامانه مدیریت پروژه‌های نظام مهندسی</title>
+<meta name="theme-color" content="#2563eb">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="پروژه‌ها">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap">
+<style>
+:root{--bg:#eef4fc;--primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#eff6ff;--border:#e2e8f0;--border-strong:#cbd5e1;--text:#0f172a;--text-soft:#334155;--muted:#64748b;--faint:#94a3b8;--success:#16a34a;--success-bg:#ecfdf5;--success-border:#a7f3d0;--warn:#b45309;--warn-bg:#fffbeb;--warn-border:#fde68a;--danger:#dc2626;--danger-bg:#fef2f2;--danger-border:#fecaca;--radius-card:20px;--radius-input:14px;--radius-btn:12px}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;font-family:'Vazirmatn',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}
+body{background:radial-gradient(circle at 10% 20%,rgba(219,234,254,.7) 0%,rgba(240,249,255,.4) 40%,var(--bg) 100%);color:var(--text);min-height:100vh;display:flex;justify-content:center;padding:calc(16px + env(safe-area-inset-top)) 12px calc(60px + env(safe-area-inset-bottom));line-height:1.5;font-size:16px}
+.app{width:100%;max-width:440px;display:flex;flex-direction:column;gap:14px}
+.hidden{display:none!important}.ltr{direction:ltr;text-align:right}
+
+/* هدر */
+.hero{display:flex;justify-content:space-between;align-items:center;gap:10px;background:linear-gradient(135deg,#1e40af,#2563eb 50%,#3b82f6);padding:15px 18px;border-radius:20px;box-shadow:0 8px 24px -4px rgba(37,99,235,.25)}
+.hero h1{font-size:1.1rem;font-weight:800;color:#fff;line-height:1.4}.hero p{font-size:.75rem;color:var(--primary-light);margin-top:2px}
+.icon-round{width:34px;height:34px;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;background:rgba(255,255,255,.22);border:1.5px solid rgba(255,255,255,.5);color:#fff;font-weight:800}
+
+/* کارت */
+.card{background:rgba(255,255,255,.92);border:1.5px solid var(--border);border-radius:var(--radius-card);padding:18px 16px;box-shadow:0 10px 30px -5px rgba(15,23,42,.08),0 4px 12px -2px rgba(37,99,235,.06)}
+.card.blue{border-color:#dbeafe}.card.green{border-color:#bbf7d0;background:linear-gradient(180deg,#fff,#f0fdf4)}
+.card-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:14px;padding-bottom:8px;border-bottom:2px dashed var(--border)}
+.card-head.plain{border-bottom:0;padding-bottom:0;margin-bottom:0}
+.card-title{display:flex;align-items:center;gap:8px;font-size:1.05rem;font-weight:800;color:#1e3a8a}
+.title-bar{width:4px;height:18px;border-radius:4px;background:linear-gradient(180deg,#2563eb,#094cb2)}
+.badge{font-size:.75rem;font-weight:700;padding:3px 10px;border-radius:10px;background:var(--primary-light);color:var(--primary);border:1px solid #bfdbfe}
+.badge-map{white-space:nowrap;flex-shrink:0;font-family:system-ui,sans-serif;font-size:.82rem;font-weight:800;letter-spacing:.5px;color:#fff;padding:3px 9px;border-radius:8px;background:linear-gradient(135deg,#0284c7,#0369a1);box-shadow:0 2px 6px rgba(2,132,199,.35)}
+.tag{font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:4px}
+.tag.design{color:#0284c7;background:#e0f2fe}.tag.supervise{color:#047857;background:var(--success-bg);border:1px solid var(--success-border)}
+
+/* فرم */
+.form-group{margin-bottom:14px}.form-label{display:block;font-size:.95rem;font-weight:600;color:var(--text-soft);margin-bottom:6px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form-input,.form-textarea,.search-input,.note-textarea{width:100%;border:1.5px solid var(--border-strong);border-radius:var(--radius-input);background:#fff;color:var(--text);font-size:1rem;outline:none;text-align:right;transition:border-color .2s,box-shadow .2s}
+.form-input,.search-input{height:48px;padding:0 14px}.form-textarea{min-height:86px;padding:12px 14px;resize:vertical}
+.search-input{border-color:#dbeafe;margin-bottom:14px}
+::placeholder{color:var(--faint);font-size:.92rem}
+.form-input:focus,.form-textarea:focus,.search-input:focus,.note-textarea:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(37,99,235,.14)}
+
+/* دکمه */
+.btn{display:flex;align-items:center;justify-content:center;gap:6px;height:46px;padding:0 14px;border-radius:var(--radius-btn);cursor:pointer;font-size:.95rem;font-weight:700;border:1.5px solid var(--border-strong);background:#fff;color:#475569;text-decoration:none;transition:transform .1s,background .2s}
+.btn:active{transform:scale(.985)}
+.btn-primary{height:50px;width:100%;border:0;color:#fff;font-size:1.05rem;font-weight:800;background:linear-gradient(135deg,#2563eb,#1d4ed8 50%,#094cb2);box-shadow:0 6px 20px -2px rgba(37,99,235,.45)}
+.btn-primary.saved{background:var(--success)}
+.btn-warn{background:var(--warn-bg);color:var(--warn);border-color:var(--warn-border)}.btn-danger{background:var(--danger-bg);color:var(--danger);border-color:var(--danger-border)}.btn-soft{background:var(--primary-light);color:#1e40af;border-color:#bfdbfe}
+.btn-sm{height:40px;font-size:.92rem}.btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.actions{display:flex;flex-direction:column;gap:10px}
+
+/* تاشو */
+.accordion-toggle{cursor:pointer;user-select:none}
+.fold{display:grid;grid-template-rows:1fr;opacity:1;transition:grid-template-rows .35s ease,opacity .3s ease}.fold-inner{overflow:hidden;padding-top:14px}
+.card.collapsed .fold{grid-template-rows:0fr;opacity:0}
+.chevron{transition:transform .3s ease;width:18px;height:18px}.card.collapsed .chevron{transform:rotate(180deg)}
+.state-label{font-size:.75rem;font-weight:700;padding:4px 10px;border-radius:10px;color:var(--success);background:#dcfce7;border:1px solid var(--success-border)}
+.card.collapsed .state-label{color:#475569;background:var(--border);border-color:var(--border-strong)}
+.editing-banner{display:none;align-items:center;justify-content:space-between;background:#fef3c7;color:#92400e;padding:8px 12px;border-radius:8px;font-size:.8rem;font-weight:600;margin-bottom:14px}
+.link-btn{background:none;border:0;cursor:pointer;font-size:.8rem;font-weight:700;color:var(--warn);text-decoration:underline}
+
+/* لیست */
+.customers-list{display:flex;flex-direction:column;gap:14px;max-height:480px;overflow-y:auto;padding:0 2px}
+.customer-card{border:1px solid var(--border);border-radius:16px;padding:14px;background:linear-gradient(180deg,#fff,#fbfcfe);box-shadow:0 4px 12px -2px rgba(15,23,42,.05)}
+.customer-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.customer-info{text-align:left;min-width:0;overflow-wrap:anywhere}
+.customer-name{font-size:1.1rem;font-weight:800}.customer-office{font-size:.9rem;color:var(--muted);margin-top:2px}
+.customer-meta{display:flex;justify-content:space-between;align-items:center;font-size:.86rem;color:var(--faint);margin:8px 0 12px}
+.customer-phone{direction:ltr;font-weight:600;color:#475569}
+.customer-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.customer-actions .btn{padding:0 6px;min-width:0;white-space:nowrap}
+.customer-actions .btn-soft{grid-column:1/-1;order:-1}
+.empty-state{text-align:center;padding:32px 10px;color:var(--faint);font-size:.9rem}
+
+/* مودال */
+.modal-overlay{position:fixed;inset:0;z-index:999;display:none;align-items:flex-end;justify-content:center;background:rgba(15,23,42,.45);backdrop-filter:blur(4px)}
+.modal-overlay.active{display:flex}
+.modal-content{width:100%;max-width:440px;max-height:85vh;display:flex;flex-direction:column;background:#fff;border-radius:24px 24px 0 0;box-shadow:0 -10px 30px rgba(0,0,0,.15);animation:slideUp .25s ease-out}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-header{padding:16px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.modal-header h3{font-size:1.1rem;font-weight:700;color:var(--primary)}
+.close-btn{width:32px;height:32px;border:0;border-radius:50%;background:#f1f5f9;color:var(--muted);font-size:1.1rem;cursor:pointer}
+.modal-body{padding:14px 16px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:12px;background:#f8fafc}
+.modal-footer{padding:14px 16px calc(14px + env(safe-area-inset-bottom));border-top:1px solid var(--border);display:flex;flex-direction:column;gap:8px}
+.guide-box{background:var(--primary-light);border:1px solid #bfdbfe;border-radius:14px;padding:14px;color:#1e3a8a;font-size:.86rem;line-height:1.8}
+.guide-list{list-style:none;display:flex;flex-direction:column;gap:8px;font-size:.85rem;line-height:1.7;color:var(--text-soft)}.guide-list li::before{content:'✓ ';color:var(--primary);font-weight:700}
+
+/* یادداشت */
+.note-bubble{background:#fff;border:1px solid var(--border);border-radius:14px 14px 4px 14px;padding:10px 12px}
+.note-header{display:flex;justify-content:space-between;align-items:center;font-size:.76rem;color:var(--faint);margin-bottom:6px;padding-bottom:4px;border-bottom:1px dashed #f1f5f9}
+.note-actions{display:flex;gap:8px}.note-actions button{background:none;border:0;cursor:pointer;font-size:.76rem;font-weight:600}
+.note-edit{color:#d97706}.note-del{color:#ef4444}
+.note-text{font-size:.94rem;color:var(--text-soft);white-space:pre-wrap;line-height:1.6}
+.note-empty{text-align:center;padding:24px 10px;color:var(--faint);font-size:.88rem}
+.note-input-row{display:flex;gap:8px;align-items:flex-end}.note-textarea{flex:1;height:100px;padding:10px 12px;resize:none;background:#f8fafc}
+.btn-add{height:44px;padding:0 18px;border:0;border-radius:var(--radius-input);background:var(--primary);color:#fff;font-weight:700;cursor:pointer;white-space:nowrap}
+
+/* جزئیات */
+.top-bar{display:flex;align-items:center;justify-content:space-between}
+.contact-box{background:#f8fafc;border:1px solid var(--border);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.contact-line{display:flex;justify-content:space-between;font-size:.88rem;color:var(--muted);font-weight:600}.contact-line b{color:var(--text)}
+.eng-list{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.eng-list.closed{display:none}
+.eng-item{background:#f8fafc;border:1px solid var(--border);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:8px}
+.eng-head{display:flex;justify-content:space-between;align-items:center;font-size:.88rem;font-weight:700;color:#1e3a8a}
+.eng-row{display:flex;gap:8px;align-items:center}.eng-item .form-input{height:44px;font-size:.95rem;padding:0 12px}.eng-row .eng-phone{flex:1;min-width:0;text-align:center}
+.eng-call{width:44px;height:44px;flex:none;border-radius:10px;display:flex;align-items:center;justify-content:center;background:var(--success-bg);border:1px solid var(--success-border);color:var(--success);text-decoration:none}
+.eng-call.off{opacity:.35;pointer-events:none}
+.tip-box{display:flex;gap:8px;font-size:.84rem;color:var(--muted);background:#f8fafc;border:1.5px solid var(--border);border-radius:12px;padding:10px 12px;line-height:1.7}
+
+.toast{position:fixed;bottom:24px;left:50%;z-index:10000;pointer-events:none;opacity:0;transform:translateX(-50%) translateY(100px);background:#1e293b;color:#fff;padding:10px 20px;border-radius:30px;font-size:.88rem;font-weight:600;box-shadow:0 8px 20px rgba(0,0,0,.2);transition:transform .3s cubic-bezier(.18,.89,.32,1.28),opacity .3s}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+</style>
+</head>
+<body>
+
+<!-- ============ نمای لیست ============ -->
+<div class="app" id="viewList">
+  <header class="hero">
+    <div><h1>سامانه مدیریت پروژه‌های نظام مهندسی</h1><p>ثبت آنلاین پرونده‌ها و پیگیری دفاتر مهندسی</p></div>
+    <button type="button" class="icon-round" id="openGuideBtn" aria-label="راهنما">؟</button>
+  </header>
+
+  <section class="card blue">
+    <div class="card-head plain" style="margin-bottom:16px">
+      <div class="card-title"><span class="title-bar"></span>لیست پروژه‌ها</div>
+      <span class="badge" id="countBadge">0 پروژه</span>
+    </div>
+    <input class="search-input" id="searchInput" type="search" placeholder="جستجو بر اساس نام، دفتر، شماره نقشه، پرونده یا کد نوسازی...">
+    <div class="customers-list" id="customersContainer"></div>
+  </section>
+
+  <section class="card green" id="formCard">
+    <div class="card-head plain accordion-toggle" id="toggleFormBtn">
+      <div class="card-title" id="formTitle">ثبت پروژه جدید</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="state-label" id="accordionLabel">بستن کادر</span>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+    <div class="fold"><div class="fold-inner">
+      <div class="editing-banner" id="editingBanner"><span>در حال ویرایش اطلاعات پروژه</span><button type="button" class="link-btn" id="cancelEditBtn">انصراف</button></div>
+      <form id="customerForm" autocomplete="off">
+        <input type="hidden" id="editCustomerId">
+        <div class="form-group"><label class="form-label" for="fFullName">نام و نام خانوادگی:</label><input class="form-input" id="fFullName" placeholder="مثلاً: علی محمدی" required></div>
+        <div class="form-group"><label class="form-label" for="fOffice">نام دفتر مهندسی:</label><input class="form-input" id="fOffice" placeholder="مثلاً: دفتر مهندسی پارس" required></div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label" for="fMap">شماره نقشه:</label><input class="form-input ltr" id="fMap" placeholder="MAP-1042" required></div>
+          <div class="form-group"><label class="form-label" for="fPhone">موبایل مشتری:</label><input class="form-input ltr" id="fPhone" type="tel" inputmode="tel" placeholder="09123456789" required></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label" for="fCase">پرونده شهرداری:</label><input class="form-input ltr" id="fCase" placeholder="1403/9211"></div>
+          <div class="form-group"><label class="form-label" for="fRenov">کد نوسازی:</label><input class="form-input ltr" id="fRenov" placeholder="12-45-789"></div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:8px">
+          <button class="btn btn-primary" style="flex:2" type="submit" id="submitBtn">ذخیره</button>
+          <button class="btn" style="flex:1;height:50px" type="button" id="resetBtn">بازنشانی</button>
+        </div>
+      </form>
+    </div></div>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><div class="card-title">پشتیبان‌گیری از داده‌ها</div><span class="badge" id="lastBackup">بدون پشتیبان</span></div>
+    <div class="btn-row">
+      <button type="button" class="btn btn-soft" id="exportBtn">خروجی JSON</button>
+      <button type="button" class="btn" id="importBtn">بازیابی از فایل</button>
+    </div>
+    <input type="file" id="importFile" accept="application/json,.json" class="hidden">
+    <p style="font-size:.8rem;color:var(--muted);margin-top:10px;line-height:1.7">داده‌ها فقط در همین مرورگر ذخیره می‌شوند. پیش از پاک کردن اطلاعات مرورگر یا تعویض گوشی، یک خروجی بگیرید.</p>
+  </section>
+</div>
+
+<!-- ============ نمای جزئیات ============ -->
+<main class="app hidden" id="viewDetail">
+  <header class="top-bar">
+    <button type="button" class="btn btn-sm" id="backBtn" style="color:var(--primary)">› بازگشت به لیست</button>
+    <span class="badge-map" id="dMapBadge">—</span>
+  </header>
+  <div style="text-align:center">
+    <h1 style="font-size:1.25rem;font-weight:800;color:var(--primary-dark)" id="dTitle">جزئیات پرونده</h1>
+    <p style="font-size:.85rem;color:var(--faint);margin-top:2px">ویرایش و جزئیات پرونده مشتری</p>
+  </div>
+
+  <section class="card">
+    <div class="card-head"><div class="card-title">مشخصات کارفرما و دفتر</div></div>
+    <div class="form-group"><label class="form-label">نام مالک / کارفرما:</label><input class="form-input" data-field="fullName"></div>
+    <div class="form-group"><label class="form-label">دفتر مهندسی طرف قرارداد:</label><input class="form-input" data-field="officeName"></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">شماره موبایل:</label><input class="form-input ltr" data-field="phone" id="dPhone" type="tel" inputmode="tel"></div>
+      <div class="form-group"><label class="form-label">شماره نقشه:</label><input class="form-input ltr" data-field="mapNumber"></div>
+    </div>
+    <div class="contact-box">
+      <div class="contact-line"><span>ثبت پرونده:</span><b id="dCreated">—</b></div>
+      <div class="btn-row">
+        <a class="btn btn-sm" id="callBtn" style="background:var(--primary);color:#fff;border:0">تماس فوری</a>
+        <a class="btn btn-sm" id="smsBtn">ارسال پیامک</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><div class="card-title">مشخصات ملکی و شهرداری</div></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">پرونده شهرداری:</label><input class="form-input ltr" data-field="caseNumber"></div>
+      <div class="form-group"><label class="form-label">کد نوسازی:</label><input class="form-input ltr" data-field="renovationCode"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">تعداد طبقات:</label><input class="form-input" data-field="floors" placeholder="مثلاً: ۵ طبقه"></div>
+      <div class="form-group"><label class="form-label">متراژ زمین / زیربنا:</label><input class="form-input" data-field="area" placeholder="مثلاً: ۳۲۰ متر مربع"></div>
+    </div>
+    <div class="form-group" style="margin-bottom:0"><label class="form-label">آدرس دقیق ملک و پروژه:</label><textarea class="form-textarea" data-field="address" placeholder="نشانی پستی، پلاک، واحد..."></textarea></div>
+  </section>
+
+  <section class="card">
+    <div class="card-head plain accordion-toggle" id="engToggle">
+      <div class="card-title">مهندسین طراح و ناظر</div>
+      <div style="display:flex;align-items:center;gap:8px"><span class="badge">۸ تخصص</span>
+        <svg class="chevron" id="engChevron" style="transform:rotate(180deg)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></div>
+    </div>
+    <div class="eng-list" id="engList"></div>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><div class="card-title">روند فعالیت‌ها و پیگیری‌ها</div><span class="badge" id="dNotesCount">۰ یادداشت</span></div>
+    <div style="margin-bottom:14px;display:flex;flex-direction:column;gap:8px">
+      <textarea class="form-textarea" id="dNoteInput" rows="4" placeholder="ثبت پیگیری یا یادداشت جدید..." style="min-height:110px"></textarea>
+      <button type="button" class="btn btn-primary" id="dAddNoteBtn" style="height:44px;font-size:.95rem">ثبت یادداشت</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px" id="dNotesList"></div>
+  </section>
+
+  <div class="tip-box"><span>ⓘ</span><span>اطلاعات پس از «ذخیره» در حافظه آفلاین مرورگر نگه‌داری می‌شود. یادداشت‌ها بلافاصله ذخیره می‌شوند.</span></div>
+  <div class="actions">
+    <button type="button" class="btn btn-primary" id="dSaveBtn">ذخیره و بروزرسانی پرونده</button>
+    <button type="button" class="btn" id="dRevertBtn">بازنشانی به آخرین ذخیره</button>
+    <button type="button" class="btn btn-danger" id="dDeleteBtn">حذف پرونده</button>
+  </div>
+</main>
+
+<!-- مودال یادداشت‌ها (نمای لیست) -->
+<div class="modal-overlay" id="notesModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div><h3 id="modalName">یادداشت‌ها</h3><span id="modalMap" style="font-size:.75rem;color:var(--muted)"></span></div>
+      <button type="button" class="close-btn" id="closeModalBtn" aria-label="بستن">×</button>
+    </div>
+    <div class="modal-body" id="notesBody"></div>
+    <div class="modal-footer">
+      <div id="editingNoteBanner" class="editing-banner" style="margin:0"><span>در حال ویرایش پیام...</span><button type="button" class="link-btn" id="cancelNoteEditBtn">انصراف</button></div>
+      <div class="note-input-row"><textarea class="note-textarea" id="noteInput" placeholder="ثبت پیگیری یا یادداشت جدید..."></textarea><button type="button" class="btn-add" id="saveNoteBtn">ارسال</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- مودال راهنما -->
+<div class="modal-overlay" id="guideModal">
+  <div class="modal-content">
+    <div class="modal-header"><h3 style="color:var(--text)">راهنما و درباره سامانه</h3><button type="button" class="close-btn" id="closeGuideBtn" aria-label="بستن">×</button></div>
+    <div class="modal-body" style="background:#fff;gap:16px">
+      <div class="guide-box"><b>📌 معرفی نرم‌افزار</b><br>سامانه مدیریت دفاتر نظام مهندسی، طراحی محمد مصلایی (عضو سازمان نظام مهندسی قزوین)، برای ثبت سریع و پیگیری وضعیت پرونده‌ها، نقشه‌ها و مراحل صدور پروانه ساختمانی.</div>
+      <ul class="guide-list">
+        <li><b>ثبت سریع پروژه:</b> کارفرما، دفتر مهندسی، شماره نقشه، پرونده شهرداری و کد نوسازی.</li>
+        <li><b>صفحه جزئیات:</b> مشخصات ملکی، مهندسین طراح و ناظر، و روند پیگیری‌ها.</li>
+        <li><b>یادداشت و پیگیری:</b> تاریخچه جلسات، مکاتبات و تاییدات فنی هر پروژه.</li>
+        <li><b>آفلاین و قابل نصب:</b> داده‌ها در مرورگر نگه‌داری می‌شوند و برنامه روی صفحه اصلی نصب می‌شود.</li>
+      </ul>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-soft hidden" id="installBtn">نصب برنامه روی دستگاه</button>
+      <button type="button" class="btn btn-primary" id="okGuideBtn" style="height:44px;font-size:.95rem">متوجه شدم</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===== ۱. داده و ابزار مشترک ===== */
+const STORAGE_KEY = 'crm_offline_customers_v2';
+const $ = id => document.getElementById(id);
+const DAY = 86400000;
+let customers = [];
+
+const defaultProjects = [
+  { id:'p1', fullName:'علی محمدی', officeName:'دفتر مهندسی پارس', mapNumber:'MAP-1042', phone:'09123456789', createdAt:Date.now()-120000,
+    notes:[{id:'n_1',text:'تماس اولیه گرفته شد و نقشه معماری بررسی گردید.',time:'دیروز ساعت ۱۶:۳۰'},{id:'n_2',text:'تأییدیه مرحله اول نقشه‌ها دریافت شد.',time:'۲ دقیقه پیش'}] },
+  { id:'p2', fullName:'مهندس رضا کمالی', officeName:'شرکت ساختمانی آریا', mapNumber:'MAP-1045', phone:'09121112233', createdAt:Date.now()-3600000,
+    notes:[{id:'n_21',text:'جلسه هماهنگی سازه با کارفرما برگزار شد.',time:'۲ روز پیش'},{id:'n_22',text:'ارسال نقشه‌های محاسباتی به کنترل مضاعف.',time:'دیروز'}] },
+  { id:'p3', fullName:'مجتمع مسکونی نیلوفر (سارا احمدی)', officeName:'آتلیه معماری خط نو', mapNumber:'MAP-1048', phone:'09124445566', createdAt:Date.now()-DAY,
+    notes:[{id:'n_31',text:'بررسی نما در کمیسیون طراحی شهری منطقه.',time:'دیروز'}] },
+  { id:'p4', fullName:'برج تجاری اداری سپهر (محمد حسینی)', officeName:'مهندسین مشاور سازه پایدار', mapNumber:'MAP-1051', phone:'09128889900', createdAt:Date.now()-3*DAY,
+    notes:[{id:'n_41',text:'درخواست دستور نقشه جدید شهرداری.',time:'۴ روز پیش'},{id:'n_42',text:'استعلام آتش‌نشانی و تاییدیه پله فرار.',time:'۳ روز پیش'}] },
+  { id:'p5', fullName:'ویلای دماوند (فرهاد کاظمی)', officeName:'دفتر فنی البرز', mapNumber:'MAP-1055', phone:'09126667788', createdAt:Date.now()-5*DAY, notes:[] },
+  { id:'p6', fullName:'بازسازی آپارتمان قلهک (الهام رحیمی)', officeName:'دفتر مهندسی پارس', mapNumber:'MAP-1060', phone:'09127778899', createdAt:Date.now()-7*DAY,
+    notes:[{id:'n_61',text:'برداشت اولیه و ترسیم نقشه ازبیلت.',time:'۱ هفته پیش'}] }
+];
+
+function loadData(){
+  try{
+    const s = localStorage.getItem(STORAGE_KEY);
+    customers = s ? JSON.parse(s) : structuredClone(defaultProjects);
+    if(!s) saveData();
+  }catch(e){ customers = structuredClone(defaultProjects); }
+}
+function saveData(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(customers)); return true; }
+  catch(e){ showToast('خطا در ذخیره‌سازی اطلاعات'); return false; }
+}
+function escapeHtml(s){ const d=document.createElement('div'); d.textContent=s||''; return d.innerHTML; }
+const fa = n => Number(n).toLocaleString('fa-IR');
+function relativeTime(ts){
+  if(!ts) return 'هم‌اکنون';
+  const m=Math.floor((Date.now()-ts)/60000), h=Math.floor(m/60), d=Math.floor(h/24);
+  if(m<1) return 'هم‌اکنون'; if(m<60) return `${m} دقیقه پیش`; if(h<24) return `${h} ساعت پیش`;
+  if(d===1) return 'دیروز'; if(d<7) return `${d} روز پیش`; return `${Math.floor(d/7)} هفته پیش`;
+}
+function nowPersian(){
+  try{ const n=new Date(); return `${new Intl.DateTimeFormat('fa-IR',{month:'short',day:'numeric'}).format(n)} ساعت ${new Intl.DateTimeFormat('fa-IR',{hour:'2-digit',minute:'2-digit'}).format(n)}`; }
+  catch(e){ return 'هم‌اکنون'; }
+}
+let toastTimer;
+function showToast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),2300); }
+
+/* ===== ۲. روتر (hash): #/ لیست ، #/p/<id> جزئیات ===== */
+/* نمایش مستقیم با JS انجام می‌شود و hash فقط برای دکمه back مرورگر همگام می‌شود؛
+   در پیش‌نمایش‌های sandbox (مثل نمای فایل در اپ) تغییر hash ممکن است کار نکند. */
+function route(forceId){
+  loadData();
+  const m = location.hash.match(/^#\/p\/(.+)$/);
+  let id = forceId !== undefined ? forceId : null;
+  if(forceId === undefined && m){ try{ id = decodeURIComponent(m[1]); }catch(e){} }
+  if(id){
+    const c = customers.find(x => x.id === id);
+    if(c){ showDetail(c); return; }
+    showToast('پرونده پیدا نشد.');
+  }
+  $('viewDetail').classList.add('hidden');
+  $('viewList').classList.remove('hidden');
+  renderList();
+  window.scrollTo(0,0);
+}
+function navigate(id){
+  try{ location.hash = id ? '#/p/' + encodeURIComponent(id) : '#/'; }catch(e){}
+  route(id || null);
+}
+window.addEventListener('hashchange', () => route());
+window.addEventListener('pageshow', e => { if(e.persisted) route(); });
+
+/* ===== ۳. نمای لیست ===== */
+function renderList(){
+  const q = $('searchInput').value.trim().toLowerCase();
+  const list = customers.filter(c => !q || [c.fullName,c.officeName,c.mapNumber,c.phone,c.caseNumber,c.renovationCode].some(v => (v||'').toLowerCase().includes(q)));
+  $('countBadge').textContent = `${list.length} پروژه`;
+  if(!list.length){ $('customersContainer').innerHTML='<div class="empty-state">پروژه‌ای با این مشخصات یافت نشد.</div>'; return; }
+  $('customersContainer').innerHTML = list.map(c => `
+    <div class="customer-card">
+      <div class="customer-top">
+        <span class="badge-map">${escapeHtml(c.mapNumber)}</span>
+        <div class="customer-info"><div class="customer-name">${escapeHtml(c.fullName)}</div><div class="customer-office">دفتر: ${escapeHtml(c.officeName)}</div></div>
+      </div>
+      <div class="customer-meta"><span>${relativeTime(c.createdAt)}</span><span class="customer-phone">${escapeHtml(c.phone)}</span></div>
+      <div class="customer-actions">
+        <button type="button" class="btn btn-sm btn-danger" data-act="delete" data-id="${c.id}">حذف</button>
+        <button type="button" class="btn btn-sm btn-warn" data-act="edit" data-id="${c.id}">ویرایش</button>
+        <button type="button" class="btn btn-sm" data-act="detail" data-id="${c.id}">جزئیات</button>
+        <button type="button" class="btn btn-sm btn-soft" data-act="notes" data-id="${c.id}">یادداشت‌ها (${(c.notes||[]).length})</button>
+      </div>
+    </div>`).join('');
+}
+$('customersContainer').addEventListener('click', e => {
+  const b = e.target.closest('button[data-act]'); if(!b) return;
+  ({ delete: deleteCustomer, edit: startEdit, notes: openNotes, detail: navigate })[b.dataset.act](b.dataset.id);
+});
+$('searchInput').addEventListener('input', renderList);
+
+/* فرم ثبت/ویرایش */
+const F = { fullName:'fFullName', officeName:'fOffice', mapNumber:'fMap', phone:'fPhone', caseNumber:'fCase', renovationCode:'fRenov' };
+$('customerForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const data = {}; for(const k in F) data[k] = $(F[k]).value.trim();
+  if(!data.fullName || !data.officeName || !data.mapNumber || !data.phone){ showToast('فیلدهای ضروری را تکمیل کنید.'); return; }
+  const editId = $('editCustomerId').value;
+  if(editId){ const c = customers.find(x => x.id===editId); if(c) Object.assign(c,data); showToast('اطلاعات پروژه بروزرسانی شد.'); exitEdit(); }
+  else{ customers.unshift({ id:'p_'+Date.now(), ...data, createdAt:Date.now(), notes:[] }); showToast('پروژه جدید ثبت شد.'); }
+  saveData(); $('customerForm').reset(); renderList();
+});
+function toggleForm(open){
+  const card=$('formCard'); open = open ?? card.classList.contains('collapsed');
+  card.classList.toggle('collapsed', !open); $('accordionLabel').textContent = open ? 'بستن کادر' : 'باز کردن +';
+}
+$('toggleFormBtn').addEventListener('click', () => toggleForm());
+function startEdit(id){
+  const c = customers.find(x => x.id===id); if(!c) return;
+  toggleForm(true); $('editCustomerId').value = c.id;
+  for(const k in F) $(F[k]).value = c[k] || '';
+  $('formTitle').textContent='ویرایش اطلاعات پروژه'; $('submitBtn').textContent='ذخیره تغییرات'; $('editingBanner').style.display='flex';
+  $('formCard').scrollIntoView({behavior:'smooth',block:'start'}); $('fFullName').focus();
+}
+function exitEdit(){ $('editCustomerId').value=''; $('formTitle').textContent='ثبت پروژه جدید'; $('submitBtn').textContent='ذخیره'; $('editingBanner').style.display='none'; }
+$('cancelEditBtn').addEventListener('click', e => { e.stopPropagation(); exitEdit(); $('customerForm').reset(); });
+$('resetBtn').addEventListener('click', () => { exitEdit(); $('customerForm').reset(); });
+function deleteCustomer(id){
+  const c = customers.find(x => x.id===id);
+  if(!c || !confirm(`آیا از حذف پروژه «${c.fullName}» مطمئن هستید؟`)) return;
+  customers = customers.filter(x => x.id!==id); saveData(); renderList(); showToast('پروژه حذف شد.');
+}
+
+/* مودال یادداشت‌ها */
+let activeC = null, editingNoteId = null;
+function openNotes(id){
+  activeC = customers.find(x => x.id===id); if(!activeC) return;
+  cancelNoteEdit();
+  $('modalName').textContent = `پیگیری‌های ${activeC.fullName}`;
+  $('modalMap').textContent = `شماره نقشه: ${activeC.mapNumber} | دفتر: ${activeC.officeName}`;
+  renderModalNotes(); $('notesModal').classList.add('active'); document.body.style.overflow='hidden';
+}
+function closeNotes(){ $('notesModal').classList.remove('active'); document.body.style.overflow=''; activeC=null; renderList(); }
+function renderModalNotes(){
+  const notes = activeC?.notes || [], body = $('notesBody');
+  if(!notes.length){ body.innerHTML='<div class="note-empty">هنوز یادداشتی ثبت نشده است.</div>'; return; }
+  body.innerHTML = notes.map(n => `
+    <div class="note-bubble"><div class="note-header"><span>${escapeHtml(n.time)}</span>
+      <div class="note-actions"><button class="note-edit" data-note="edit" data-id="${n.id}">ویرایش</button><button class="note-del" data-note="del" data-id="${n.id}">حذف</button></div></div>
+      <div class="note-text">${escapeHtml(n.text)}</div></div>`).join('');
+  body.scrollTop = body.scrollHeight;
+}
+$('notesBody').addEventListener('click', e => {
+  const b = e.target.closest('button[data-note]'); if(!b || !activeC) return;
+  if(b.dataset.note==='edit'){
+    const n = activeC.notes.find(x => x.id===b.dataset.id); if(!n) return;
+    editingNoteId=n.id; $('noteInput').value=n.text; $('noteInput').focus();
+    $('editingNoteBanner').style.display='flex'; $('saveNoteBtn').textContent='ذخیره';
+  }else if(confirm('آیا از حذف این یادداشت اطمینان دارید؟')){
+    activeC.notes = activeC.notes.filter(x => x.id!==b.dataset.id); saveData(); renderModalNotes(); showToast('یادداشت حذف شد.');
+  }
+});
+$('saveNoteBtn').addEventListener('click', () => {
+  const text = $('noteInput').value.trim(); if(!text || !activeC) return;
+  activeC.notes = activeC.notes || [];
+  if(editingNoteId){ const n = activeC.notes.find(x => x.id===editingNoteId); if(n) n.text=text; showToast('یادداشت ویرایش شد.'); }
+  else{ activeC.notes.push({id:'n_'+Date.now(),text,time:nowPersian()}); showToast('یادداشت ثبت شد.'); }
+  cancelNoteEdit(); saveData(); renderModalNotes();
+});
+function cancelNoteEdit(){ editingNoteId=null; $('noteInput').value=''; $('editingNoteBanner').style.display='none'; $('saveNoteBtn').textContent='ارسال'; }
+$('cancelNoteEditBtn').addEventListener('click', cancelNoteEdit);
+$('closeModalBtn').addEventListener('click', closeNotes);
+$('notesModal').addEventListener('click', e => { if(e.target===e.currentTarget) closeNotes(); });
+
+/* راهنما */
+const setGuide = open => { $('guideModal').classList.toggle('active',open); document.body.style.overflow = open ? 'hidden' : ''; };
+$('openGuideBtn').addEventListener('click', () => setGuide(true));
+['closeGuideBtn','okGuideBtn'].forEach(id => $(id).addEventListener('click', () => setGuide(false)));
+$('guideModal').addEventListener('click', e => { if(e.target===e.currentTarget) setGuide(false); });
+
+/* ===== پشتیبان‌گیری: خروجی و بازیابی JSON ===== */
+const BACKUP_KEY = 'crm_last_backup';
+function showLastBackup(){
+  let t = 0; try{ t = Number(localStorage.getItem(BACKUP_KEY)); }catch(e){}
+  $('lastBackup').textContent = t ? `آخرین: ${relativeTime(t)}` : 'بدون پشتیبان';
+}
+async function exportBackup(){
+  loadData();
+  const payload = { app:'crm-engineering', version:1, exportedAt:new Date().toISOString(), customers };
+  const name = `crm-backup-${new Date().toISOString().slice(0,10)}.json`;
+  const file = new File([JSON.stringify(payload,null,2)], name, { type:'application/json' });
+  try{
+    /* روی موبایل از منوی اشتراک‌گذاری استفاده می‌شود (دانلود در PWA نصب‌شده روی iOS مطمئن نیست) */
+    if(matchMedia('(pointer:coarse)').matches && navigator.canShare?.({files:[file]})){
+      await navigator.share({ files:[file], title:name });
+    }else{
+      const url = URL.createObjectURL(file), a = document.createElement('a');
+      a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+    try{ localStorage.setItem(BACKUP_KEY, String(Date.now())); }catch(e){}
+    showLastBackup(); showToast('فایل پشتیبان آماده شد.');
+  }catch(e){ if(e.name !== 'AbortError') showToast('خروجی گرفتن ناموفق بود.'); }
+}
+function sanitizeCustomer(c){
+  if(!c || typeof c.id !== 'string' || typeof c.fullName !== 'string') return null;
+  return {
+    ...c,
+    officeName:String(c.officeName||''), mapNumber:String(c.mapNumber||''), phone:String(c.phone||''),
+    createdAt:Number(c.createdAt) || Date.now(),
+    notes:Array.isArray(c.notes) ? c.notes.filter(n => n && typeof n.text === 'string')
+      .map((n,i) => ({ id:String(n.id || `n_${Date.now()}_${i}`), text:n.text, time:String(n.time||'') })) : [],
+    engineers:(c.engineers && typeof c.engineers === 'object') ? c.engineers : {}
+  };
+}
+async function importBackup(file){
+  if(!file) return;
+  let list;
+  try{
+    const data = JSON.parse(await file.text());
+    list = Array.isArray(data) ? data : data.customers;
+  }catch(e){ showToast('فایل معتبر نیست.'); return; }
+  const clean = Array.isArray(list) ? list.map(sanitizeCustomer).filter(Boolean) : [];
+  if(!clean.length){ showToast('پرونده‌ای در فایل پیدا نشد.'); return; }
+  if(!confirm(`${fa(clean.length)} پرونده در فایل هست.\nپرونده‌های هم‌شناسه جایگزین و بقیه به لیست اضافه می‌شوند. ادامه می‌دهید؟`)) return;
+  loadData();
+  const map = new Map(customers.map(c => [c.id, c]));
+  clean.forEach(c => map.set(c.id, c));
+  customers = [...map.values()].sort((a,b) => b.createdAt - a.createdAt);
+  if(saveData()){ renderList(); showToast(`${fa(clean.length)} پرونده بازیابی شد.`); }
+}
+$('exportBtn').addEventListener('click', exportBackup);
+$('importBtn').addEventListener('click', () => $('importFile').click());
+$('importFile').addEventListener('change', e => { importBackup(e.target.files[0]); e.target.value = ''; });
+
+/* ===== ۴. نمای جزئیات ===== */
+const ROLES = [
+  {key:'arch_d',label:'طراح معماری',type:'design'},{key:'struct_d',label:'طراح سازه',type:'design'},
+  {key:'mech_d',label:'طراح مکانیک',type:'design'},{key:'elec_d',label:'طراح برق',type:'design'},
+  {key:'arch_s',label:'ناظر معماری',type:'supervise'},{key:'struct_s',label:'ناظر سازه',type:'supervise'},
+  {key:'mech_s',label:'ناظر مکانیک',type:'supervise'},{key:'elec_s',label:'ناظر برق',type:'supervise'}
+];
+const TEXT_FIELDS = ['fullName','officeName','phone','mapNumber','caseNumber','renovationCode','floors','area','address'];
+const dField = k => document.querySelector(`#viewDetail [data-field="${k}"]`);
+let cur = null;
+
+$('engList').innerHTML = ROLES.map(r => `
+  <div class="eng-item">
+    <div class="eng-head"><span>${r.label}</span><span class="tag ${r.type}">${r.type==='design'?'طراحی':'نظارت'}</span></div>
+    <input class="form-input" data-eng-name="${r.key}" placeholder="نام و نام خانوادگی مهندس">
+    <div class="eng-row">
+      <input class="form-input eng-phone ltr" data-eng-phone="${r.key}" type="tel" inputmode="tel" placeholder="0912...">
+      <a class="eng-call off" data-eng-call="${r.key}" aria-label="تماس با ${r.label}">☎</a>
+    </div>
+  </div>`).join('');
+$('engList').addEventListener('input', refreshLinks);
+$('engToggle').addEventListener('click', () => {
+  const closed = $('engList').classList.toggle('closed');
+  $('engChevron').style.transform = closed ? 'rotate(0deg)' : 'rotate(180deg)';
+});
+
+function showDetail(c){
+  cur = c;
+  $('viewList').classList.add('hidden'); $('viewDetail').classList.remove('hidden');
+  fillDetail(); window.scrollTo(0,0);
+}
+function fillDetail(){
+  TEXT_FIELDS.forEach(k => dField(k).value = cur[k] || '');
+  const eng = cur.engineers || {};
+  ROLES.forEach(r => {
+    document.querySelector(`[data-eng-name="${r.key}"]`).value = eng[r.key]?.name || '';
+    document.querySelector(`[data-eng-phone="${r.key}"]`).value = eng[r.key]?.phone || '';
+  });
+  refreshLinks(); refreshHeader(); renderDetailNotes();
+}
+function refreshHeader(){
+  $('dMapBadge').textContent = cur.mapNumber || '—';
+  $('dTitle').textContent = cur.fullName || 'جزئیات پرونده';
+  try{ $('dCreated').textContent = new Intl.DateTimeFormat('fa-IR',{dateStyle:'medium'}).format(new Date(cur.createdAt)); }catch(e){ $('dCreated').textContent='—'; }
+}
+function refreshLinks(){
+  const p = $('dPhone').value.trim();
+  const setHref = (el, href) => href ? el.setAttribute('href', href) : el.removeAttribute('href');
+  setHref($('callBtn'), p && `tel:${p}`); setHref($('smsBtn'), p && `sms:${p}`);
+  ROLES.forEach(r => {
+    const v = document.querySelector(`[data-eng-phone="${r.key}"]`).value.trim();
+    const a = document.querySelector(`[data-eng-call="${r.key}"]`);
+    setHref(a, v && `tel:${v}`); a.classList.toggle('off', !v);
+  });
+}
+$('dPhone').addEventListener('input', refreshLinks);
+
+$('dSaveBtn').addEventListener('click', () => {
+  const data = {}; TEXT_FIELDS.forEach(k => data[k] = dField(k).value.trim());
+  if(!data.fullName || !data.mapNumber){ showToast('نام کارفرما و شماره نقشه الزامی است.'); return; }
+  data.engineers = {};
+  ROLES.forEach(r => {
+    const name = document.querySelector(`[data-eng-name="${r.key}"]`).value.trim();
+    const phone = document.querySelector(`[data-eng-phone="${r.key}"]`).value.trim();
+    if(name || phone) data.engineers[r.key] = {name,phone};
+  });
+  Object.assign(cur, data);
+  if(!saveData()) return;
+  refreshHeader();
+  const b = $('dSaveBtn'); b.classList.add('saved'); b.textContent = '✓ پرونده با موفقیت ذخیره شد';
+  setTimeout(() => { b.classList.remove('saved'); b.textContent='ذخیره و بروزرسانی پرونده'; }, 1800);
+});
+$('dRevertBtn').addEventListener('click', () => {
+  if(!confirm('تغییرات ذخیره‌نشده از بین می‌رود. ادامه می‌دهید؟')) return;
+  loadData(); cur = customers.find(c => c.id===cur.id) || cur; fillDetail(); showToast('اطلاعات به آخرین ذخیره بازگشت.');
+});
+$('dDeleteBtn').addEventListener('click', () => {
+  if(!confirm(`آیا از حذف پرونده «${cur.fullName}» اطمینان دارید؟`)) return;
+  customers = customers.filter(c => c.id!==cur.id); saveData(); navigate(null);
+});
+$('backBtn').addEventListener('click', () => navigate(null));
+
+function renderDetailNotes(){
+  const notes = cur.notes || [], box = $('dNotesList');
+  $('dNotesCount').textContent = `${fa(notes.length)} یادداشت`;
+  if(!notes.length){ box.innerHTML='<div class="note-empty">هنوز یادداشتی ثبت نشده است.</div>'; return; }
+  box.innerHTML = [...notes].reverse().map(n => `
+    <div class="note-bubble"><div class="note-header"><span>${escapeHtml(n.time)}</span>
+      <div class="note-actions"><button class="note-del" data-id="${n.id}">حذف</button></div></div>
+      <div class="note-text">${escapeHtml(n.text)}</div></div>`).join('');
+}
+function addDetailNote(){
+  const text = $('dNoteInput').value.trim(); if(!text) return;
+  cur.notes = cur.notes || []; cur.notes.push({id:'n_'+Date.now(),text,time:nowPersian()});
+  $('dNoteInput').value=''; saveData(); renderDetailNotes(); showToast('یادداشت ثبت شد.');
+}
+$('dAddNoteBtn').addEventListener('click', addDetailNote);
+$('dNotesList').addEventListener('click', e => {
+  const b = e.target.closest('button[data-id]'); if(!b || !confirm('آیا از حذف این یادداشت اطمینان دارید؟')) return;
+  cur.notes = cur.notes.filter(n => n.id!==b.dataset.id); saveData(); renderDetailNotes(); showToast('یادداشت حذف شد.');
+});
+
+/* ===== ۵. PWA ===== */
+(function setupPWA(){
+  /* آیکون PNG با canvas ساخته می‌شود تا فایل تصویری جدا لازم نباشد */
+  const icon = size => {
+    const c = document.createElement('canvas'); c.width = c.height = size;
+    const x = c.getContext('2d'), g = x.createLinearGradient(0,0,size,size);
+    g.addColorStop(0,'#1e40af'); g.addColorStop(1,'#3b82f6');
+    x.fillStyle = g; x.fillRect(0,0,size,size);
+    x.strokeStyle = '#fff'; x.lineWidth = size*.045; x.lineJoin = 'round';
+    const s = size, m = s*.26;                       /* خانه ساده: بدنه و سقف */
+    x.beginPath(); x.moveTo(m,s*.5); x.lineTo(s/2,s*.24); x.lineTo(s-m,s*.5); x.lineTo(s-m,s*.76); x.lineTo(m,s*.76); x.closePath(); x.stroke();
+    x.strokeRect(s*.43,s*.55,s*.14,s*.21);
+    return c.toDataURL('image/png');
+  };
+  const i192 = icon(192), i512 = icon(512);
+  const base = location.href.split('#')[0];
+  const manifest = {
+    name:'سامانه مدیریت پروژه‌های نظام مهندسی', short_name:'پروژه‌ها', lang:'fa', dir:'rtl',
+    start_url:base, scope:base.replace(/[^/]*$/,''), display:'standalone',
+    background_color:'#eef4fc', theme_color:'#2563eb',
+    icons:[{src:i192,sizes:'192x192',type:'image/png',purpose:'any maskable'},{src:i512,sizes:'512x512',type:'image/png',purpose:'any maskable'}]
+  };
+  const link = document.createElement('link'); link.rel='manifest';
+  link.href = URL.createObjectURL(new Blob([JSON.stringify(manifest)],{type:'application/manifest+json'}));
+  document.head.appendChild(link);
+  const touch = document.createElement('link'); touch.rel='apple-touch-icon'; touch.href=i192; document.head.appendChild(touch);
+
+  if('serviceWorker' in navigator && location.protocol.startsWith('http'))
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+
+  let deferred;
+  window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferred = e; $('installBtn').classList.remove('hidden'); });
+  $('installBtn').addEventListener('click', async () => {
+    if(!deferred) return; deferred.prompt(); await deferred.userChoice; deferred = null; $('installBtn').classList.add('hidden');
+  });
+})();
+
+/* ===== ۶. راه‌اندازی ===== */
+showLastBackup();
+route();
+</script>
+</body>
+</html>
