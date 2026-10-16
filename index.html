@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>سامانه مدیریت پروژه‌های دفاتر مهندسی</title>
+<meta name="theme-color" content="#1a6ee0">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
+<style>
+  :root{
+    --blue:#1a6ee0; --blue-dark:#0f4fa8; --blue-light:#eaf2fd;
+    --text:#1c2b3a; --muted:#6b7a8c; --bg:#fbfcfe; --border:#e3eaf3;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:"Vazirmatn",Tahoma,sans-serif;
+    background:var(--bg); color:var(--text);
+    line-height:1.9; min-height:100vh;
+    display:flex; flex-direction:column;
+  }
+  a{text-decoration:none;color:inherit}
+
+  /* ---------- Header ---------- */
+  header{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 5vw; background:#fff; border-bottom:1px solid var(--border);
+    position:sticky; top:0; z-index:50;
+  }
+  .brand{display:flex; align-items:center; gap:10px; font-weight:700; font-size:15px}
+  .brand svg{width:34px;height:34px;color:var(--blue)}
+  nav{display:flex; align-items:center; gap:8px}
+  nav a{
+    padding:8px 16px; border-radius:8px; font-size:14px; color:var(--muted);
+    transition:.2s;
+  }
+  nav a:hover{background:var(--blue-light); color:var(--blue)}
+  nav a.cta{
+    background:var(--blue); color:#fff; font-weight:600;
+  }
+  nav a.cta:hover{background:var(--blue-dark)}
+  nav a.icon{display:flex; align-items:center; padding:8px 10px}
+  nav a.icon svg{width:20px;height:20px}
+
+  /* ---------- Hero ---------- */
+  main{flex:1}
+  .hero{ text-align:center; padding:72px 5vw 40px; max-width:820px; margin:0 auto}
+  .hero h1{font-size:clamp(26px,4.5vw,44px); font-weight:800; color:var(--blue-dark); line-height:1.5}
+  .hero p{
+    margin:22px auto 0; max-width:640px;
+    color:var(--muted); font-size:clamp(14px,2vw,17px);
+  }
+  .btn-main{
+    display:inline-flex; align-items:center; gap:8px;
+    margin-top:34px; background:var(--blue); color:#fff;
+    padding:14px 44px; border-radius:12px; font-size:16px; font-weight:700;
+    transition:.2s; box-shadow:0 6px 18px rgba(26,110,224,.25);
+  }
+  .btn-main:hover{background:var(--blue-dark); transform:translateY(-2px)}
+  .offline-note{margin-top:14px; font-size:13px; color:var(--muted)}
+
+  /* ---------- Features ---------- */
+  .features{
+    display:grid; grid-template-columns:repeat(3,1fr);
+    max-width:1050px; margin:40px auto 70px; padding:0 5vw;
+  }
+  .feature{
+    text-align:center; padding:28px 16px;
+    border-inline-start:1px solid var(--border);
+  }
+  .feature:first-child{border-inline-start:none}
+  .feature svg{width:38px;height:38px;color:var(--blue);margin-bottom:12px}
+  .feature h3{font-size:16px; font-weight:700}
+
+  /* ---------- Footer ---------- */
+  footer{
+    background:#fff; border-top:1px solid var(--border);
+    padding:22px 5vw;
+    display:flex; align-items:center; justify-content:space-between;
+    flex-wrap:wrap; gap:10px; font-size:13px;
+  }
+  footer .credit{color:var(--muted)}
+  footer .credit b{color:var(--text)}
+  footer .links{display:flex; gap:6px}
+  footer .links button{
+    background:none; border:none; cursor:pointer;
+    font-family:inherit; font-size:13px; color:var(--blue);
+    padding:6px 12px; border-radius:6px;
+  }
+  footer .links button:hover{background:var(--blue-light)}
+
+  /* ---------- Modal ---------- */
+  .modal{
+    display:none; position:fixed; inset:0; z-index:100;
+    background:rgba(15,30,50,.45);
+    align-items:center; justify-content:center; padding:16px;
+  }
+  .modal.open{display:flex}
+  .modal-box{
+    background:#fff; border-radius:16px; max-width:520px; width:100%;
+    max-height:85vh; overflow-y:auto; padding:28px;
+    animation:pop .2s ease;
+  }
+  @keyframes pop{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
+  .modal-box h2{font-size:18px; color:var(--blue-dark); margin-bottom:14px}
+  .modal-box ul{padding-inline-start:20px; color:var(--muted); font-size:14px}
+  .modal-box li{margin-bottom:8px}
+  .modal-close{
+    margin-top:18px; width:100%; padding:10px;
+    background:var(--blue-light); color:var(--blue); border:none;
+    border-radius:8px; font-family:inherit; font-size:14px; font-weight:600; cursor:pointer;
+  }
+  .modal-close:hover{background:#d8e8fb}
+
+  /* ---------- Responsive ---------- */
+  @media(max-width:640px){
+    header{flex-direction:column; gap:10px}
+    nav{width:100%; justify-content:center}
+    .hero{padding-top:48px}
+    .features{grid-template-columns:1fr; gap:0}
+    .feature{border-inline-start:none; border-top:1px solid var(--border)}
+    .feature:first-child{border-top:none}
+    footer{flex-direction:column; text-align:center}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 2 3 7v10l9 5 9-5V7z"/><path d="M12 22V12"/><path d="M3 7l9 5 9-5"/>
+    </svg>
+    <span>سامانه مدیریت پروژه‌های دفاتر مهندسی</span>
+  </div>
+  <nav>
+    <a class="cta" href="#" id="shareBtn">اشتراک‌گذاری</a>
+    <a class="icon" href="https://github.com/USERNAME/nezam-crm-pwa" target="_blank" rel="noopener" aria-label="گیت‌هاب">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-1.94c-3.2.7-3.87-1.54-3.87-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.75 2.69 1.25 3.35.95.1-.74.4-1.25.72-1.53-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a11 11 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.59.23 2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.38-5.25 5.67.41.35.77 1.04.77 2.1v3.12c0 .3.21.66.8.55A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+    </a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <h1>مدیریت پروژه‌های دفاتر مهندسی،<br>بدون نیاز به اینترنت</h1>
+    <p>یک ابزار تخصصی، سبک و امن برای دفاتر نظام مهندسی جهت پیگیری پرونده‌ها، ۸ تخصص طراحی و نظارت، یادداشت‌برداری سریع و پشتیبان‌گیری محلی برای هر پروژه.</p>
+    <a class="btn-main" href="https://github.com/USERNAME/nezam-crm-pwa" target="_blank" rel="noopener">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+      اجرای برنامه
+    </a>
+    <div class="offline-note">قابل نصب روی موبایل و دسکتاپ &nbsp;•&nbsp; اطلاعات روی دستگاه شما می‌ماند</div>
+  </section>
+
+  <section class="features">
+    <div class="feature">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+      <h3>پیگیری پرونده‌ها</h3>
+    </div>
+    <div class="feature">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 22h20"/><path d="M4 22V6l8-4 8 4v16"/><path d="M9 22v-4h6v4"/><path d="M9 10h.01M15 10h.01M9 14h.01M15 14h.01"/></svg>
+      <h3>۸ تخصص طراحی و نظارت</h3>
+    </div>
+    <div class="feature">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+      <h3>یادداشت و پشتیبان‌گیری محلی</h3>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="credit">
+    طراح: <b>محمد مصلایی</b> — عضو سازمان نظام مهندسی قزوین — تلگرام: <a href="https://t.me/msli1976" style="color:var(--blue)" dir="ltr">@msli1976</a>
+  </div>
+  <div class="links">
+    <button data-modal="guideModal">راهنما</button>
+    <button data-modal="privacyModal">حریم خصوصی</button>
+  </div>
+</footer>
+
+<!-- راهنما -->
+<div class="modal" id="guideModal">
+  <div class="modal-box">
+    <h2>راهنمای استفاده</h2>
+    <ul>
+      <li>روی دکمه «اجرای برنامه» بزنید؛ در موبایل می‌توانید صفحه را با گزینه «Add to Home Screen» به‌صورت اپ نصب کنید.</li>
+      <li>در دسکتاپ، آیکن نصب در نوار آدرس مرورگر ظاهر می‌شود.</li>
+      <li>پس از اولین اجرا، برنامه بدون اینترنت هم کامل کار می‌کند.</li>
+      <li>برای هر پروژه می‌توانید پرونده، تخصص‌ها و یادداشت‌ها را ثبت و در نهایت خروجی JSON بگیرید.</li>
+      <li>پشتیبان‌گیری و بازیابی کاملاً محلی انجام می‌شود؛ فایل پشتیبان را در جای مطمئن نگه دارید.</li>
+    </ul>
+    <button class="modal-close" data-close>بستن</button>
+  </div>
+</div>
+
+<!-- حریم خصوصی -->
+<div class="modal" id="privacyModal">
+  <div class="modal-box">
+    <h2>حریم خصوصی</h2>
+    <ul>
+      <li>تمام داده‌ها فقط در حافظه‌ی محلی مرورگر (localStorage) روی دستگاه خودتان ذخیره می‌شود.</li>
+      <li>هیچ اطلاعاتی به هیچ سروری ارسال یا همگام‌سازی نمی‌شود.</li>
+      <li>پاک‌کردن داده‌های مرورگر یا نصب مجدد مرورگر می‌تواند داده‌های محلی را حذف کند؛ به‌طور منظم خروجی JSON تهیه کنید.</li>
+      <li>این برنامه هیچ کوکی ردیابی، تبلیغ یا سرویس تحلیل خارجی ندارد.</li>
+    </ul>
+    <button class="modal-close" data-close>بستن</button>
+  </div>
+</div>
+
+<script>
+  // باز و بسته کردن مودال‌ها
+  document.querySelectorAll('[data-modal]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.getElementById(btn.dataset.modal).classList.add('open');
+    });
+  });
+  document.querySelectorAll('.modal').forEach(function(m){
+    m.addEventListener('click', function(e){
+      if(e.target === m || e.target.hasAttribute('data-close')) m.classList.remove('open');
+    });
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') document.querySelectorAll('.modal.open').forEach(function(m){m.classList.remove('open')});
+  });
+
+  // اشتراک‌گذاری (Web Share API با fallback کپی لینک)
+  document.getElementById('shareBtn').addEventListener('click', function(e){
+    e.preventDefault();
+    var data = {title:'سامانه مدیریت پروژه‌های دفاتر مهندسی', text:'ابزار آفلاین مدیریت پرونده‌های نظام مهندسی', url:location.href};
+    if(navigator.share){ navigator.share(data).catch(function(){}); }
+    else if(navigator.clipboard){
+      navigator.clipboard.writeText(location.href).then(function(){ alert('لینک کپی شد ✔'); });
+    }
+  });
+</script>
+</body>
+</html>
