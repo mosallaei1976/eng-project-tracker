@@ -1,7 +1,8 @@
 /* Service Worker: کش پوسته برنامه و فونت برای کار آفلاین.
    با تغییر index.html عدد نسخه را بالا ببرید تا کش قدیمی پاک شود. */
-const CACHE = 'crm-shell-v7';
-const SHELL = ['./', './index.html'];
+const CACHE = 'crm-shell-v8';
+const SHELL = ['./', './index.html', './app.html', './manifest.json', './icon-192.png', './icon-512.png'];
+
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));
