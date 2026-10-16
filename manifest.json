@@ -1,7 +1,7 @@
 {
   "name": "سامانه مدیریت پروژه‌های دفاتر مهندسی",
   "short_name": "نقشه‌یار",
-  "start_url": "./app.html",
+  "start_url": "https://mosallaei1976.github.io/eng-project-tracker/app.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#ffffff",
