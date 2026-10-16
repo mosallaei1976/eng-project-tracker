@@ -244,33 +244,7 @@
   <script>
 if ('serviceWorker' in navigator && location.protocol.startsWith('http'))
   navigator.serviceWorker.register('sw.js').catch(() => {});
-</script>
 
-  // باز و بسته کردن مودال‌ها
-  document.querySelectorAll('[data-modal]').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      document.getElementById(btn.dataset.modal).classList.add('open');
-    });
-  });
-  document.querySelectorAll('.modal').forEach(function(m){
-    m.addEventListener('click', function(e){
-      if(e.target === m || e.target.hasAttribute('data-close')) m.classList.remove('open');
-    });
-  });
-  document.addEventListener('keydown', function(e){
-    if(e.key === 'Escape') document.querySelectorAll('.modal.open').forEach(function(m){m.classList.remove('open')});
-  });
-
-  // اشتراک‌گذاری (Web Share API با fallback کپی لینک)
-  document.getElementById('shareBtn').addEventListener('click', function(e){
-    e.preventDefault();
-    var data = {title:'سامانه مدیریت پروژه‌های دفاتر مهندسی', text:'ابزار آفلاین مدیریت پرونده‌های نظام مهندسی', url:location.href};
-    if(navigator.share){ navigator.share(data).catch(function(){}); }
-    else if(navigator.clipboard){
-      navigator.clipboard.writeText(location.href).then(function(){ alert('لینک کپی شد ✔'); });
-    }
-  });
-</script>
 
 
   
