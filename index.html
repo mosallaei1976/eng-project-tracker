@@ -209,6 +209,11 @@
 </div>
 
 <script>
+  <script>
+if ('serviceWorker' in navigator && location.protocol.startsWith('http'))
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+</script>
+
   // باز و بسته کردن مودال‌ها
   document.querySelectorAll('[data-modal]').forEach(function(btn){
     btn.addEventListener('click', function(){
