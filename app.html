@@ -87,7 +87,8 @@ body{background:radial-gradient(circle at 10% 20%,rgba(219,234,254,.7) 0%,rgba(2
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 .modal-header{padding:16px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
 .modal-header h3{font-size:1.1rem;font-weight:700;color:var(--primary)}
-.close-btn{width:32px;height:32px;border:0;border-radius:50%;background:#f1f5f9;color:var(--muted);font-size:1.1rem;cursor:pointer}
+.modal-header-actions{display:flex;align-items:center;gap:8px}
+.close-btn{width:32px;height:32px;border:0;border-radius:50%;background:#f1f5f9;color:var(--muted);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;text-decoration:none}
 .modal-body{padding:14px 16px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:12px;background:#f8fafc}
 .modal-footer{padding:14px 16px calc(14px + env(safe-area-inset-bottom));border-top:1px solid var(--border);display:flex;flex-direction:column;gap:8px}
 .guide-box{background:var(--primary-light);border:1px solid #bfdbfe;border-radius:14px;padding:14px;color:#1e3a8a;font-size:.86rem;line-height:1.8}
@@ -128,7 +129,7 @@ body{background:radial-gradient(circle at 10% 20%,rgba(219,234,254,.7) 0%,rgba(2
   <header class="hero">
     <div><h1>نقشه یار</h1><p>ثبت آفلاین پرونده‌ها و پیگیری دفاتر مهندسی</p></div>
     <div class="hero-actions">
-      <a href="https://mosallaei1976.github.io/eng-project-tracker/" target="_blank" rel="noopener noreferrer" class="icon-round" id="shareAppBtn" aria-label="اشتراک‌گذاری">
+      <a href="https://mosallaei1976.github.io/eng-project-tracker/" target="_blank" rel="noopener noreferrer" class="icon-round shareAppBtn" aria-label="اشتراک‌گذاری">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="18" cy="5" r="3"></circle>
           <circle cx="6" cy="12" r="3"></circle>
@@ -284,7 +285,21 @@ body{background:radial-gradient(circle at 10% 20%,rgba(219,234,254,.7) 0%,rgba(2
 <!-- مودال راهنما -->
 <div class="modal-overlay" id="guideModal">
   <div class="modal-content">
-    <div class="modal-header"><h3 style="color:var(--text)">راهنما و درباره سامانه</h3><button type="button" class="close-btn" id="closeGuideBtn" aria-label="بستن">×</button></div>
+    <div class="modal-header">
+      <h3 style="color:var(--text)">راهنما و درباره سامانه</h3>
+      <div class="modal-header-actions">
+        <a href="https://mosallaei1976.github.io/eng-project-tracker/" target="_blank" rel="noopener noreferrer" class="close-btn shareAppBtn" aria-label="اشتراک‌گذاری" style="background:#f1f5f9;color:var(--primary);text-decoration:none;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="5" r="3"></circle>
+            <circle cx="6" cy="12" r="3"></circle>
+            <circle cx="18" cy="19" r="3"></circle>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+          </svg>
+        </a>
+        <button type="button" class="close-btn" id="closeGuideBtn" aria-label="بستن">×</button>
+      </div>
+    </div>
     <div class="modal-body" style="background:#fff;gap:16px">
       <div class="guide-box"><b>📌 معرفی نرم‌افزار</b><br>سامانه مدیریت دفاتر نظام مهندسی، طراحی محمد مصلایی (عضو سازمان نظام مهندسی قزوین)، برای ثبت سریع و پیگیری وضعیت پرونده‌ها، نقشه‌ها و مراحل صدور پروانه ساختمانی.</div>
       <ul class="guide-list">
@@ -351,28 +366,30 @@ let toastTimer;
 function showToast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),2300); }
 
 /* اشتراک‌گذاری */
-$('shareAppBtn').addEventListener('click', async e => {
-  e.preventDefault();
-  const shareUrl = 'https://mosallaei1976.github.io/eng-project-tracker/';
-  if(navigator.share){
-    try {
-      await navigator.share({
-        title: 'سامانه نقشه‌یار',
-        text: 'سامانه مدیریت دفاتر نظام مهندسی و پیگیری پرونده‌ها',
-        url: shareUrl
-      });
-      return;
-    } catch(err) {
-      if(err.name === 'AbortError') return;
+document.querySelectorAll('.shareAppBtn').forEach(btn => {
+  btn.addEventListener('click', async e => {
+    e.preventDefault();
+    const shareUrl = 'https://mosallaei1976.github.io/eng-project-tracker/';
+    if(navigator.share){
+      try {
+        await navigator.share({
+          title: 'سامانه نقشه‌یار',
+          text: 'سامانه مدیریت دفاتر نظام مهندسی و پیگیری پرونده‌ها',
+          url: shareUrl
+        });
+        return;
+      } catch(err) {
+        if(err.name === 'AbortError') return;
+      }
     }
-  }
-  if(navigator.clipboard && navigator.clipboard.writeText){
-    try {
-      await navigator.clipboard.writeText(shareUrl);
-      showToast('لینک سامانه در کلیپ‌بورد کپی شد.');
-    } catch(err) {}
-  }
-  window.open(shareUrl, '_blank');
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+        showToast('لینک سامانه در کلیپ‌بورد کپی شد.');
+      } catch(err) {}
+    }
+    window.open(shareUrl, '_blank');
+  });
 });
 
 /* ===== ۲. روتر (hash): #/ لیست ، #/p/<id> جزئیات ===== */
@@ -499,7 +516,7 @@ $('saveNoteBtn').addEventListener('click', () => {
   activeC.notes = activeC.notes || [];
   if(editingNoteId){ 
     const n = activeC.notes.find(x => x.id===editingNoteId); 
-    if(n) { n.text = text; /* تاریخ تغییر نمی‌کند */ } 
+    if(n) { n.text = text; } 
     showToast('یادداشت ویرایش شد.'); 
   }
   else{ 
