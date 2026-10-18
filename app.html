@@ -333,32 +333,25 @@ const $ = id => document.getElementById(id);
 const DAY = 86400000;
 let customers = [];
 
-const defaultProjects = [
-  { id:'p1', fullName:'علی محمدی', officeName:'دفتر مهندسی پارس', mapNumber:'MAP-1042', phone:'09123456789', createdAt:Date.now()-120000,
-    notes:[{id:'n_1',text:'تماس اولیه گرفته شد و نقشه معماری بررسی گردید.',time:'دیروز ساعت ۱۶:۳۰'},{id:'n_2',text:'تأییدیه مرحله اول نقشه‌ها دریافت شد.',time:'۲ دقیقه پیش'}] },
-  { id:'p2', fullName:'مهندس رضا کمالی', officeName:'شرکت ساختمانی آریا', mapNumber:'MAP-1045', phone:'09121112233', createdAt:Date.now()-3600000,
-    notes:[{id:'n_21',text:'جلسه هماهنگی سازه با کارفرما برگزار شد.',time:'۲ روز پیش'},{id:'n_22',text:'ارسال نقشه‌های محاسباتی به کنترل مضاعف.',time:'دیروز'}] },
-  { id:'p3', fullName:'مجتمع مسکونی نیلوفر (سارا احمدی)', officeName:'آتلیه معماری خط نو', mapNumber:'MAP-1048', phone:'09124445566', createdAt:Date.now()-DAY,
-    notes:[{id:'n_31',text:'بررسی نما در کمیسیون طراحی شهری منطقه.',time:'دیروز'}] },
-  { id:'p4', fullName:'برج تجاری اداری سپهر (محمد حسینی)', officeName:'مهندسین مشاور سازه پایدار', mapNumber:'MAP-1051', phone:'09128889900', createdAt:Date.now()-3*DAY,
-    notes:[{id:'n_41',text:'درخواست دستور نقشه جدید شهرداری.',time:'۴ روز پیش'},{id:'n_42',text:'استعلام آتش‌نشانی و تاییدیه پله فرار.',time:'۳ روز پیش'}] },
-  { id:'p5', fullName:'ویلای دماوند (فرهاد کاظمی)', officeName:'دفتر فنی البرز', mapNumber:'MAP-1055', phone:'09126667788', createdAt:Date.now()-5*DAY, notes:[] },
-  { id:'p6', fullName:'بازسازی آپارتمان قلهک (الهام رحیمی)', officeName:'دفتر مهندسی پارس', mapNumber:'MAP-1060', phone:'09127778899', createdAt:Date.now()-7*DAY,
-    notes:[{id:'n_61',text:'برداشت اولیه و ترسیم نقشه ازبیلت.',time:'۱ هفته پیش'}] }
-];
-
 function loadData(){
-  try{
-    const s = localStorage.getItem(STORAGE_KEY);
-    customers = s ? JSON.parse(s) : structuredClone(defaultProjects);
-    if(!s) saveData();
-  }catch(e){ customers = structuredClone(defaultProjects); }
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) { customers = []; return; }
+    const parsed = JSON.parse(raw);
+    customers = Array.isArray(parsed) ? parsed.map(sanitizeCustomer).filter(Boolean) : [];
+  } catch (e) {
+    // Do not overwrite the user's existing storage when it cannot be read.
+    customers = [];
+    showToast('خواندن اطلاعات ذخیره‌شده ناموفق بود؛ پیش از بازیابی، فایل پشتیبان را بررسی کنید.');
+  }
 }
+
 function saveData(){
   try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(customers)); return true; }
   catch(e){ showToast('خطا در ذخیره‌سازی اطلاعات'); return false; }
 }
-function escapeHtml(s){ const d=document.createElement('div'); d.textContent=s||''; return d.innerHTML; }
+function escapeHtml(s){ const d=document.createElement('div'); d.textContent=String(s ?? ''); return d.innerHTML; }
+function escapeAttr(s){ return escapeHtml(s).replace(/\"/g, '&quot;').replace(/'/g, '&#39;'); }
 const fa = n => Number(n).toLocaleString('fa-IR');
 function relativeTime(ts){
   if(!ts) return 'هم‌اکنون';
@@ -437,10 +430,10 @@ function renderList(){
       </div>
       <div class="customer-meta"><span>${relativeTime(c.createdAt)}</span><span class="customer-phone">${escapeHtml(c.phone)}</span></div>
       <div class="customer-actions">
-        <button type="button" class="btn btn-sm btn-danger" data-act="delete" data-id="${c.id}">حذف</button>
-        <button type="button" class="btn btn-sm btn-warn" data-act="edit" data-id="${c.id}">ویرایش</button>
-        <button type="button" class="btn btn-sm" data-act="detail" data-id="${c.id}">جزئیات</button>
-        <button type="button" class="btn btn-sm btn-soft" data-act="notes" data-id="${c.id}">یادداشت‌ها (${(c.notes||[]).length})</button>
+        <button type="button" class="btn btn-sm btn-danger" data-act="delete" data-id="${escapeAttr(c.id)}">حذف</button>
+        <button type="button" class="btn btn-sm btn-warn" data-act="edit" data-id="${escapeAttr(c.id)}">ویرایش</button>
+        <button type="button" class="btn btn-sm" data-act="detail" data-id="${escapeAttr(c.id)}">جزئیات</button>
+        <button type="button" class="btn btn-sm btn-soft" data-act="notes" data-id="${escapeAttr(c.id)}">یادداشت‌ها (${(c.notes||[]).length})</button>
       </div>
     </div>`).join('');
 }
@@ -457,9 +450,11 @@ $('customerForm').addEventListener('submit', e => {
   const data = {}; for(const k in F) data[k] = $(F[k]).value.trim();
   if(!data.fullName || !data.officeName || !data.mapNumber || !data.phone){ showToast('فیلدهای ضروری را تکمیل کنید.'); return; }
   const editId = $('editCustomerId').value;
-  if(editId){ const c = customers.find(x => x.id===editId); if(c) Object.assign(c,data); showToast('اطلاعات پروژه بروزرسانی شد.'); exitEdit(); }
-  else{ customers.unshift({ id:'p_'+Date.now(), ...data, createdAt:Date.now(), notes:[] }); showToast('پروژه جدید ثبت شد.'); }
-  saveData(); $('customerForm').reset(); renderList();
+  if(editId){ const c = customers.find(x => x.id===editId); if(!c){ showToast('پرونده برای ویرایش پیدا نشد.'); return; } Object.assign(c,data); }
+  else{ customers.unshift({ id:'p_'+Date.now(), ...data, createdAt:Date.now(), notes:[] }); }
+  if(!saveData()){ loadData(); renderList(); return; }
+  $('customerForm').reset(); exitEdit(); renderList();
+  showToast(editId ? 'اطلاعات پروژه بروزرسانی شد.' : 'پروژه جدید ثبت شد.');
 });
 function toggleForm(open){
   const card=$('formCard'); open = open ?? card.classList.contains('collapsed');
@@ -485,7 +480,7 @@ $('resetBtn').addEventListener('click', () => { exitEdit(); $('customerForm').re
 function deleteCustomer(id){
   const c = customers.find(x => x.id===id);
   if(!c || !confirm(`آیا از حذف پروژه «${c.fullName}» مطمئن هستید؟`)) return;
-  customers = customers.filter(x => x.id!==id); saveData(); renderList(); showToast('پروژه حذف شد.');
+  const previous = customers; customers = customers.filter(x => x.id!==id); if(!saveData()){ customers = previous; return; } renderList(); showToast('پروژه حذف شد.');
 }
 
 /* مودال یادداشت‌ها */
@@ -503,7 +498,7 @@ function renderModalNotes(){
   if(!notes.length){ body.innerHTML='<div class="note-empty">هنوز یادداشتی ثبت نشده است.</div>'; return; }
   body.innerHTML = notes.map(n => `
     <div class="note-bubble">
-      <div class="note-actions"><button class="note-edit" data-note="edit" data-id="${n.id}">ویرایش</button><button class="note-del" data-note="del" data-id="${n.id}">حذف</button></div>
+      <div class="note-actions"><button class="note-edit" data-note="edit" data-id="${escapeAttr(n.id)}">ویرایش</button><button class="note-del" data-note="del" data-id="${escapeAttr(n.id)}">حذف</button></div>
       <div class="note-text">${escapeHtml(n.text)}</div>
       <div class="note-footer"><span>${escapeHtml(n.time || '')}</span></div>
     </div>`).join('');
@@ -516,22 +511,28 @@ $('notesBody').addEventListener('click', e => {
     editingNoteId=n.id; $('noteInput').value=n.text; $('noteInput').focus();
     $('editingNoteBanner').style.display='flex'; $('saveNoteBtn').textContent='ذخیره';
   }else if(confirm('آیا از حذف این یادداشت اطمینان دارید؟')){
-    activeC.notes = activeC.notes.filter(x => x.id!==b.dataset.id); saveData(); renderModalNotes(); showToast('یادداشت حذف شد.');
+    const previous = activeC.notes; activeC.notes = previous.filter(x => x.id!==b.dataset.id); if(!saveData()){ activeC.notes = previous; return; } renderModalNotes(); showToast('یادداشت حذف شد.');
   }
 });
 $('saveNoteBtn').addEventListener('click', () => {
   const text = $('noteInput').value.trim(); if(!text || !activeC) return;
   activeC.notes = activeC.notes || [];
-  if(editingNoteId){ 
-    const n = activeC.notes.find(x => x.id===editingNoteId); 
-    if(n) { n.text = text; } 
-    showToast('یادداشت ویرایش شد.'); 
+  const previous = activeC.notes.map(n => ({...n}));
+  const wasEditing = Boolean(editingNoteId);
+  if(editingNoteId){
+    const n = activeC.notes.find(x => x.id===editingNoteId);
+    if(!n){ showToast('یادداشت برای ویرایش پیدا نشد.'); return; }
+    n.text = text;
+  } else {
+    activeC.notes.push({id:'n_'+Date.now(),text,time:nowPersian()});
   }
-  else{ 
-    activeC.notes.push({id:'n_'+Date.now(),text,time:nowPersian()}); 
-    showToast('یادداشت ثبت شد.'); 
+  if(!saveData()){
+    activeC.notes = previous;
+    cancelNoteEdit(); renderModalNotes();
+    return;
   }
-  cancelNoteEdit(); saveData(); renderModalNotes();
+  cancelNoteEdit(); renderModalNotes();
+  showToast(wasEditing ? 'یادداشت ویرایش شد.' : 'یادداشت ثبت شد.');
 });
 function cancelNoteEdit(){ editingNoteId=null; $('noteInput').value=''; $('editingNoteBanner').style.display='none'; $('saveNoteBtn').textContent='ارسال'; }
 $('cancelNoteEditBtn').addEventListener('click', cancelNoteEdit);
@@ -574,15 +575,26 @@ function exportBackup(){
   }
 }
 function sanitizeCustomer(c){
-  if(!c || typeof c.id !== 'string' || typeof c.fullName !== 'string') return null;
-  return {
-    ...c,
-    officeName:String(c.officeName||''), mapNumber:String(c.mapNumber||''), phone:String(c.phone||''),
-    createdAt:Number(c.createdAt) || Date.now(),
-    notes:Array.isArray(c.notes) ? c.notes.filter(n => n && typeof n.text === 'string')
-      .map((n,i) => ({ id:String(n.id || `n_${Date.now()}_${i}`), text:n.text, time:String(n.time||'') })) : [],
-    engineers:(c.engineers && typeof c.engineers === 'object') ? c.engineers : {}
-  };
+  // Keep the historical p1 / p_<timestamp> / imported IDs compatible, but
+  // reject markup and other characters that should never be used as DOM IDs.
+  if(!c || typeof c.id !== 'string' || !/^[A-Za-z0-9_-]{1,100}$/.test(c.id) || typeof c.fullName !== 'string') return null;
+  const clean = { id:c.id };
+  for(const key of ['fullName','officeName','mapNumber','phone','caseNumber','renovationCode','floors','area','address'])
+    clean[key] = String(c[key] ?? '');
+  clean.createdAt = Number.isFinite(Number(c.createdAt)) && Number(c.createdAt) > 0 ? Number(c.createdAt) : Date.now();
+  clean.notes = Array.isArray(c.notes) ? c.notes.filter(n => n && typeof n.text === 'string')
+    .map((n,i) => ({
+      id: typeof n.id === 'string' && /^[A-Za-z0-9_-]{1,100}$/.test(n.id) ? n.id : `n_${Date.now()}_${i}`,
+      text:n.text, time:String(n.time ?? '')
+    })) : [];
+  clean.engineers = {};
+  if(c.engineers && typeof c.engineers === 'object' && !Array.isArray(c.engineers)) {
+    for(const [key,value] of Object.entries(c.engineers)) {
+      if(/^[A-Za-z0-9_-]{1,40}$/.test(key) && value && typeof value === 'object')
+        clean.engineers[key] = { name:String(value.name ?? ''), phone:String(value.phone ?? '') };
+    }
+  }
+  return clean;
 }
 async function importBackup(file){
   if(!file) return;
@@ -704,7 +716,7 @@ function renderDetailNotes(){
   if(!notes.length){ box.innerHTML='<div class="note-empty">هنوز یادداشتی ثبت نشده است.</div>'; return; }
   box.innerHTML = [...notes].reverse().map(n => `
     <div class="note-bubble">
-      <div class="note-actions"><button class="note-del" data-id="${n.id}">حذف</button></div>
+      <div class="note-actions"><button class="note-del" data-id="${escapeAttr(n.id)}">حذف</button></div>
       <div class="note-text">${escapeHtml(n.text)}</div>
       <div class="note-footer"><span>${escapeHtml(n.time || '')}</span></div>
     </div>`).join('');
@@ -712,12 +724,12 @@ function renderDetailNotes(){
 function addDetailNote(){
   const text = $('dNoteInput').value.trim(); if(!text) return;
   cur.notes = cur.notes || []; cur.notes.push({id:'n_'+Date.now(),text,time:nowPersian()});
-  $('dNoteInput').value=''; saveData(); renderDetailNotes(); showToast('یادداشت ثبت شد.');
+  if(!saveData()){ cur.notes.pop(); return; } $('dNoteInput').value=''; renderDetailNotes(); showToast('یادداشت ثبت شد.');
 }
 $('dAddNoteBtn').addEventListener('click', addDetailNote);
 $('dNotesList').addEventListener('click', e => {
   const b = e.target.closest('button[data-id]'); if(!b || !confirm('آیا از حذف این یادداشت اطمینان دارید؟')) return;
-  cur.notes = cur.notes.filter(n => n.id!==b.dataset.id); saveData(); renderDetailNotes(); showToast('یادداشت حذف شد.');
+  const previous = cur.notes; cur.notes = previous.filter(n => n.id!==b.dataset.id); if(!saveData()){ cur.notes = previous; return; } renderDetailNotes(); showToast('یادداشت حذف شد.');
 });
 
 /* ===== ۵. PWA ===== */

@@ -1,6 +1,7 @@
 /* Service Worker: سامانه مدیریت پروژه‌های دفاتر مهندسی (PWA)
    با هر بار به‌روزرسانی محتوای برنامه، شماره نسخه زیر را ارتقا دهید. */
-const CACHE_VERSION = 'crm-shell-v10';
+const CACHE_PREFIX = 'crm-shell-';
+const CACHE_VERSION = 'crm-shell-v11';
 
 // دریافت اسکوپ داینامیک جهت تطابق دقیق با ساب‌دایرکتوری گیت‌هاب پیجز
 const SCOPE_URL = self.registration ? self.registration.scope : './';
@@ -8,6 +9,7 @@ const SCOPE_URL = self.registration ? self.registration.scope : './';
 const CORE_ASSETS = [
   SCOPE_URL,
   new URL('index.html', SCOPE_URL).toString(),
+  new URL('app.html', SCOPE_URL).toString(),
   new URL('manifest.json', SCOPE_URL).toString(),
   new URL('icon-192.png', SCOPE_URL).toString(),
   new URL('icon-512.png', SCOPE_URL).toString()
@@ -38,7 +40,7 @@ self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys => {
       return Promise.all(
-        keys.filter(key => key !== CACHE_VERSION).map(key => caches.delete(key))
+        keys.filter(key => key.startsWith(CACHE_PREFIX) && key !== CACHE_VERSION).map(key => caches.delete(key))
       );
     }).then(() => self.clients.claim())
   );
@@ -59,10 +61,10 @@ self.addEventListener('fetch', event => {
   if (req.mode === 'navigate') {
     event.respondWith(
       fetch(req)
-        .then(networkRes => {
+        .then(async networkRes => {
           if (networkRes && networkRes.ok) {
             const clone = networkRes.clone();
-            caches.open(CACHE_VERSION).then(c => c.put(req, clone));
+            await caches.open(CACHE_VERSION).then(c => c.put(req, clone));
           }
           return networkRes;
         })
@@ -85,13 +87,13 @@ self.addEventListener('fetch', event => {
     event.respondWith(
       caches.match(req).then(cached => {
         if (cached) return cached;
-        return fetch(req).then(networkRes => {
+        return fetch(req).then(async networkRes => {
           if (networkRes && (networkRes.ok || networkRes.type === 'opaque')) {
             const clone = networkRes.clone();
-            caches.open(CACHE_VERSION).then(c => c.put(req, clone));
+            await caches.open(CACHE_VERSION).then(c => c.put(req, clone));
           }
           return networkRes;
-        }).catch(() => null);
+        }).catch(() => Response.error());
       })
     );
     return;
@@ -101,10 +103,10 @@ self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(req, { ignoreSearch: true }).then(cached => {
       const networkFetch = fetch(req)
-        .then(networkRes => {
+        .then(async networkRes => {
           if (networkRes && (networkRes.ok || networkRes.type === 'opaque')) {
             const clone = networkRes.clone();
-            caches.open(CACHE_VERSION).then(c => c.put(req, clone));
+            await caches.open(CACHE_VERSION).then(c => c.put(req, clone));
           }
           return networkRes;
         })
