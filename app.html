@@ -175,7 +175,7 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
         <div class="form-group"><label class="form-label" for="fOffice">نام دفتر مهندسی:</label><input class="form-input" id="fOffice" placeholder="مثلاً: دفتر مهندسی پارس" required></div>
         <div class="form-row">
           <div class="form-group"><label class="form-label" for="fMap">شماره نقشه:</label><input class="form-input ltr" id="fMap" placeholder="MAP-1042" required></div>
-          <div class="form-group"><label class="form-label" for="fPhone">موبایل مشتری:</label><input class="form-input ltr" id="fPhone" type="tel" inputmode="numeric" pattern="[0-9]*" placeholder="09123456789" required></div>
+          <div class="form-group"><label class="form-label" for="fPhone">موبایل مشتری:</label><input class="form-input ltr" id="fPhone" type="tel" inputmode="tel" placeholder="09123456789" required></div>
         </div>
         <div class="form-row">
           <div class="form-group"><label class="form-label" for="fCase">پرونده شهرداری:</label><input class="form-input ltr" id="fCase" placeholder="1403/9211"></div>
@@ -224,7 +224,7 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
     <div class="form-group"><label class="form-label">نام مالک / کارفرما:</label><input class="form-input" data-field="fullName"></div>
     <div class="form-group"><label class="form-label">دفتر مهندسی طرف قرارداد:</label><input class="form-input" data-field="officeName"></div>
     <div class="form-row">
-      <div class="form-group"><label class="form-label">شماره موبایل:</label><input class="form-input ltr" data-field="phone" id="dPhone" type="tel" inputmode="numeric" pattern="[0-9]*"></div>
+      <div class="form-group"><label class="form-label">شماره موبایل:</label><input class="form-input ltr" data-field="phone" id="dPhone" type="tel" inputmode="tel"></div>
       <div class="form-group"><label class="form-label">شماره نقشه:</label><input class="form-input ltr" data-field="mapNumber"></div>
     </div>
     <div class="contact-box">
@@ -329,21 +329,6 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
 <script>
 /* ===== ۱. داده و ابزار مشترک ===== */
 const STORAGE_KEY = 'crm_offline_customers_v2';
-// فیلدهای شماره موبایل: فقط عدد (کیبورد عددی در موبایل)
-const PHONE_SELECTORS = ['#fPhone','#dPhone','[data-eng-phone]'];
-function digitsOnly(el){
-  const clean = el.value.replace(/[^\d]/g,'');
-  if(el.value !== clean) el.value = clean;
-}
-PHONE_SELECTORS.forEach(sel => document.querySelectorAll(sel).forEach(el => {
-  el.setAttribute('inputmode','numeric');
-  el.setAttribute('pattern','[0-9]*');
-  el.addEventListener('input', () => digitsOnly(el));
-}));
-// پشتیبانی از اینپوت‌های جدید data-eng-phone
-document.addEventListener('input', e => {
-  if(e.target.matches && e.target.matches('[data-eng-phone]')) digitsOnly(e.target);
-});
 const $ = id => document.getElementById(id);
 const DAY = 86400000;
 let customers = [];
@@ -647,7 +632,7 @@ $('engList').innerHTML = ROLES.map(r => `
     <div class="eng-head"><span>${r.label}</span><span class="tag ${r.type}">${r.type==='design'?'طراحی':'نظارت'}</span></div>
     <input class="form-input" data-eng-name="${r.key}" placeholder="نام و نام خانوادگی مهندس">
     <div class="eng-row">
-      <input class="form-input eng-phone ltr" data-eng-phone="${r.key}" type="tel" inputmode="numeric" pattern="[0-9]*" placeholder="0912...">
+      <input class="form-input eng-phone ltr" data-eng-phone="${r.key}" type="tel" inputmode="tel" placeholder="0912...">
       <a class="eng-call off" data-eng-call="${r.key}" aria-label="تماس با ${r.label}">☎</a>
     </div>
   </div>`).join('');
