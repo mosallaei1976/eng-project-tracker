@@ -27,7 +27,7 @@
 ]
 ,
   "share_target": {
-    "action": "https://github.com/mosallaei1976/eng-project-tracker/blob/main/app.html",
+    "action": "./app.html",
     "method": "GET",
     "enctype": "application/x-www-form-urlencoded",
     "params": {
