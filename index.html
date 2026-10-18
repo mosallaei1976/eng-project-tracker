@@ -1,252 +1,613 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-
-  <!-- تگ‌های AEO و سئو برای موتورهای هوش مصنوعی -->
-<meta name="author" content="محمد مصلایی، عضو سازمان نظام مهندسی قزوین">
-<meta name="description" content="سامانه آفلاین مدیریت پروژه‌های دفاتر مهندسی و نظارت، پیگیری پرونده‌ها، یادداشت‌برداری و پشتیبان‌گیری امن محلی. طراح: محمد مصلایی.">
-<meta name="keywords" content="نظام مهندسی, مدیریت پروژه مهندسی, پیگیری پرونده, پلتفرم آفلاین, مهندسی عمران, معماری, محمد مصلایی">
-<meta name="generator" content="PWA Engine">
-
-<!-- JSON-LD Structured Data برای ایندکس دقیق در موتورهای پاسخ‌گو (AEO) -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "نقشه یار",
-  "operatingSystem": "All",
-  "applicationCategory": "BusinessApplication",
-  "description": "ابزار تخصصی و آفلاین برای مهندسان نظام مهندسی جهت مدیریت پرونده‌ها، تخصص‌های ساختمانی و پشتیبان‌گیری محلی.",
-  "author": {
-    "@type": "Person",
-    "name": "محمد مصلایی",
-    "jobTitle": "آرشیتکت و عضو سازمان نظام مهندسی قزوین",
-    "url": "https://mosallaei1976.github.io/eng-project-tracker/"
-  },
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "IRR"
-  }
-}
-</script>
-
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>نقشه‌یار | دستیار کارگاهی و پیگیری پرونده‌های مهندسی</title>
+  <meta name="description" content="نقشه‌یار؛ اپلیکیشن سبک و آفلاین پیگیری پرونده‌های ساختمانی، طراحی و نظارت نظام مهندسی">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>   نقشه‌یار  </title>
-<meta name="theme-color" content="#1a6ee0">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
-<style>
-  :root{
-    --blue:#1a6ee0; --blue-dark:#0f4fa8; --blue-light:#eaf2fd;
-    --text:#1c2b3a; --muted:#6b7a8c; --bg:#fbfcfe; --border:#e3eaf3;
-  }
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{
-    font-family:"Vazirmatn",Tahoma,sans-serif;
-    background:var(--bg); color:var(--text);
-    line-height:1.9; min-height:100vh;
-    display:flex; flex-direction:column;
-  }
-  a{text-decoration:none;color:inherit}
+  <style>
+    :root {
+      --ink: #122028;
+      --ink-soft: #1c2e3a;
+      --paper: #f4efe6;
+      --card: #fffdf8;
+      --copper: #b4531a;
+      --copper-soft: #f6e6da;
+      --line: #e4d9c8;
+      --muted: #5c6a72;
+      --radius: 1rem;
+    }
 
-  /* ---------- Header ---------- */
-  header{
-    display:flex; align-items:center; justify-content:space-between;
-    padding:14px 5vw; background:#fff; border-bottom:1px solid var(--border);
-    position:sticky; top:0; z-index:50;
-  }
-  .brand{display:flex; align-items:center; gap:10px; font-weight:700; font-size:15px}
-  .brand svg{width:34px;height:34px;color:var(--blue)}
-  nav{display:flex; align-items:center; gap:8px}
-  nav a{
-    padding:8px 16px; border-radius:8px; font-size:14px; color:var(--muted);
-    transition:.2s;
-  }
-  nav a:hover{background:var(--blue-light); color:var(--blue)}
-  nav a.cta{
-    background:var(--blue); color:#fff; font-weight:600;
-  }
-  nav a.cta:hover{background:var(--blue-dark)}
-  nav a.icon{display:flex; align-items:center; padding:8px 10px}
-  nav a.icon svg{width:20px;height:20px}
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  /* ---------- Hero ---------- */
-  main{flex:1}
-  .hero{ text-align:center; padding:72px 5vw 40px; max-width:820px; margin:0 auto}
-  .hero h1{font-size:clamp(26px,4.5vw,44px); font-weight:800; color:var(--blue-dark); line-height:1.5}
-  .hero p{
-    margin:22px auto 0; max-width:640px;
-    color:var(--muted); font-size:clamp(14px,2vw,17px);
-  }
-  .btn-main{
-    display:inline-flex; align-items:center; gap:8px;
-    margin-top:34px; background:var(--blue); color:#fff;
-    padding:14px 44px; border-radius:12px; font-size:16px; font-weight:700;
-    transition:.2s; box-shadow:0 6px 18px rgba(26,110,224,.25);
-  }
-  .btn-main:hover{background:var(--blue-dark); transform:translateY(-2px)}
-  .offline-note{margin-top:14px; font-size:13px; color:var(--muted)}
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 4.5rem;
+    }
 
-  /* ---------- Features ---------- */
-  .features{
-    display:grid; grid-template-columns:repeat(3,1fr);
-    max-width:1050px; margin:40px auto 70px; padding:0 5vw;
-  }
-  .feature{
-    text-align:center; padding:28px 16px;
-    border-inline-start:1px solid var(--border);
-  }
-  .feature:first-child{border-inline-start:none}
-  .feature svg{width:38px;height:38px;color:var(--blue);margin-bottom:12px}
-  .feature h3{font-size:16px; font-weight:700}
+    body {
+      font-family: "Vazirmatn", system-ui, -apple-system, sans-serif;
+      background-color: var(--paper);
+      color: var(--ink);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      /* بهینه‌سازی برای فضای موبایل */
+      max-width: 480px;
+      margin: 0 auto;
+      box-shadow: 0 0 25px rgba(0,0,0,0.08);
+    }
 
-  /* ---------- Footer ---------- */
-  footer{
-    background:#fff; border-top:1px solid var(--border);
-    padding:22px 5vw;
-    display:flex; align-items:center; justify-content:space-between;
-    flex-wrap:wrap; gap:10px; font-size:13px;
-  }
-  footer .credit{color:var(--muted)}
-  footer .credit b{color:var(--text)}
-  footer .links{display:flex; gap:6px}
-  footer .links button{
-    background:none; border:none; cursor:pointer;
-    font-family:inherit; font-size:13px; color:var(--blue);
-    padding:6px 12px; border-radius:6px;
-  }
-  footer .links button:hover{background:var(--blue-light)}
+    .draft-grid {
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 2rem 2rem;
+    }
 
-  /* ---------- Modal ---------- */
-  .modal{
-    display:none; position:fixed; inset:0; z-index:100;
-    background:rgba(15,30,50,.45);
-    align-items:center; justify-content:center; padding:16px;
-  }
-  .modal.open{display:flex}
-  .modal-box{
-    background:#fff; border-radius:16px; max-width:520px; width:100%;
-    max-height:85vh; overflow-y:auto; padding:28px;
-    animation:pop .2s ease;
-  }
-  @keyframes pop{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
-  .modal-box h2{font-size:18px; color:var(--blue-dark); margin-bottom:14px}
-  .modal-box ul{padding-inline-start:20px; color:var(--muted); font-size:14px}
-  .modal-box li{margin-bottom:8px}
-  .modal-close{
-    margin-top:18px; width:100%; padding:10px;
-    background:var(--blue-light); color:var(--blue); border:none;
-    border-radius:8px; font-family:inherit; font-size:14px; font-weight:600; cursor:pointer;
-  }
-  .modal-close:hover{background:#d8e8fb}
+    .container {
+      padding: 0 1rem;
+    }
 
-  /* ---------- Responsive ---------- */
-  @media(max-width:640px){
-    header{flex-direction:column; gap:10px}
-    nav{width:100%; justify-content:center}
-    .hero{padding-top:48px}
-    .features{grid-template-columns:1fr; gap:0}
-    .feature{border-inline-start:none; border-top:1px solid var(--border)}
-    .feature:first-child{border-top:none}
-    footer{flex-direction:column; text-align:center}
-  }
-</style>
+    /* هدر */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background-color: rgba(18, 32, 40, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--paper);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 4rem;
+      padding: 0 1rem;
+    }
+
+    .logo-box {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .logo-badge {
+      width: 2.2rem;
+      height: 2.2rem;
+      background: var(--copper);
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      color: #fff;
+      font-size: 1.1rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-copper {
+      background-color: var(--copper);
+      color: #fff;
+    }
+
+    .btn-outline {
+      border: 1px solid var(--line);
+      background-color: transparent;
+      color: var(--ink);
+    }
+
+    /* بخش Hero */
+    .hero {
+      background-color: var(--ink);
+      color: var(--paper);
+      padding: 3rem 1rem 3.5rem;
+    }
+
+    .hero h1 {
+      font-size: 1.85rem;
+      font-weight: 900;
+      line-height: 1.3;
+      margin-bottom: 1rem;
+    }
+
+    .hero p {
+      color: #9ca3af;
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-bottom: 1.75rem;
+    }
+
+    .hero-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .hero-buttons .btn {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 0.95rem;
+    }
+
+    /* پیش‌نمایش کارت Hero */
+    .preview-card {
+      background-color: var(--ink-soft);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      margin-top: 2rem;
+      box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.4);
+    }
+
+    .preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    /* نوار تخصص‌ها */
+    .specialties-strip {
+      background-color: #e5ded2;
+      border-bottom: 1px solid var(--line);
+      padding: 1rem 0;
+      overflow-x: auto;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .specialties-list {
+      display: inline-flex;
+      gap: 0.5rem;
+      padding: 0 1rem;
+    }
+
+    .specialty-pill {
+      background-color: var(--card);
+      border: 1px solid var(--line);
+      padding: 0.3rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    /* بخش ویژگی‌ها */
+    .section-padding {
+      padding: 3.5rem 1rem;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .section-title h2 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      color: var(--ink);
+    }
+
+    .section-title p {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .grid-3 {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .card {
+      background-color: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+    }
+
+    .card-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+      background-color: var(--copper-soft);
+      color: var(--copper);
+      border-radius: 0.6rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .card p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    /* دموی پرونده‌ها */
+    .demo-container {
+      background-color: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .dossier-item {
+      padding: 0.85rem;
+      border: 1px solid var(--line);
+      border-radius: 0.6rem;
+      cursor: pointer;
+      background: var(--paper);
+    }
+
+    .dossier-item.active {
+      border-color: var(--copper);
+      background-color: var(--copper-soft);
+    }
+
+    .dossier-preview-box {
+      background-color: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 0.6rem;
+      padding: 1.25rem;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 0.3rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .badge-review { background-color: #fef3c7; color: #92400e; }
+    .badge-defect { background-color: #fee2e2; color: #991b1b; }
+    .badge-ready { background-color: #dcfce7; color: #166534; }
+
+    /* FAQ */
+    .faq-item {
+      background-color: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 0.6rem;
+      margin-bottom: 0.75rem;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 1rem;
+      font-weight: 700;
+      font-size: 0.95rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .faq-answer {
+      padding: 0 1rem 1rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+      display: none;
+      line-height: 1.6;
+    }
+
+    .faq-item.open .faq-answer {
+      display: block;
+    }
+
+    /* فوتر */
+    footer {
+      background-color: var(--ink);
+      color: #9ca3af;
+      padding: 3rem 1rem 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.9rem;
+    }
+
+    .footer-links {
+      list-style: none;
+      margin: 1.25rem 0 2rem;
+    }
+
+    .footer-links li {
+      margin-bottom: 0.6rem;
+    }
+
+    .footer-links a {
+      color: #9ca3af;
+      text-decoration: none;
+    }
+    /* بخش تخصص‌ها به صورت کانتینر فیکس بدون اسکرول افقی */
+    .specialties-section {
+      background-color: #e5ded2;
+      border-bottom: 1px solid var(--line);
+      padding: 1.25rem 1rem;
+    }
+
+    .specialties-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .specialty-pill {
+      background-color: var(--card);
+      border: 1px solid var(--line);
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+  </style>
 </head>
 <body>
 
-<header>
-  <div class="brand">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:34px;height:34px;color:var(--blue)">
-      <path d="M12 2 3 7v10l9 5 9-5V7z"/><path d="M12 22V12"/><path d="M3 7l9 5 9-5"/>
-    </svg>
-    <span>نقشه یار </span>
-  </div>
-  <nav style="display:flex; align-items:center; gap:10px;">
-    <a class="cta" href="#" id="shareBtn" style="background:var(--blue); color:#fff; padding:8px 16px; border-radius:8px; font-size:14px; font-weight:600;">اشتراک‌گذاری</a>
-    <a class="icon" href="https://github.com/mosallaei1976/eng-project-tracker" target="_blank" rel="noopener" aria-label="گیت‌هاب" style="display:flex; align-items:center; padding:8px; color:var(--muted);">
-      <svg viewBox="0 0 24 24" fill="currentColor" style="width:22px;height:22px;"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-1.94c-3.2.7-3.87-1.54-3.87-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.75 2.69 1.25 3.35.95.1-.74.4-1.25.72-1.53-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a11 11 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.59.23 2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.38-5.25 5.67.41.35.77 1.04.77 2.1v3.12c0 .3.21.66.8.55A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
-    </a>
-  </nav>
-</header>
+  <!-- هدر -->
+  <header>
+    <div class="header-inner">
+      <a href="#" class="logo-box">
+        <div class="logo-badge">ن</div>
+        <div>
+          <span style="font-weight: 800; font-size: 1.05rem; display: block;">نقشه‌یار</span>
+          <span style="font-size: 0.7rem; color: #9ca3af;">دستیار دفاتر مهندسی</span>
+        </div>
+      </a>
 
+      <a href="https://mosallaei1976.github.io/eng-project-tracker/" class="btn btn-copper">
+        نصب
+      </a>
+    </div>
+  </header>
 
-<main>
-  <section class="hero">
-    <h1>مدیریت پروژه‌های دفاتر مهندسی،<br>بدون نیاز به اینترنت</h1>
-    <p>یک ابزار تخصصی، سبک و امن برای دفاتر نظام مهندسی جهت پیگیری پرونده‌ها، ۸ تخصص طراحی و نظارت، یادداشت‌برداری سریع و پشتیبان‌گیری محلی برای هر پروژه.</p>
-    <a class="btn-main" href="./app.html">
+  <!-- بخش اصلی (Hero) -->
+  <section class="hero draft-grid">
+    <div class="container">
+      <h1>پیگیری پرونده‌های مهندسی، سریع و بدون نیاز به اینترنت</h1>
+      <p>
+        سامانه اختصاصی دفاتر نظام مهندسی و طراحان ساختمانی؛ یادداشت‌گذاری سریع، ثبت وضعیت شهرداری و مدیریت هشت تخصص فنی.
+      </p>
+      <div class="hero-buttons">
+        <a href="https://mosallaei1976.github.io/eng-project-tracker/" class="btn btn-copper">
+          نصب نقشه‌یار
+        </a>
+        <a href="#demo" class="btn btn-outline" style="border-color: rgba(255,255,255,0.2); color: #fff;">
+          مشاهده نمونه پرونده
+        </a>
+      </div>
 
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
-      نصب نقشه‌یار
-    </a>
-    <div class="offline-note">قابل نصب روی موبایل و دسکتاپ &nbsp;•&nbsp; اطلاعات روی دستگاه شما می‌ماند</div>
+      <!-- کارت پیش‌نمایش در Hero -->
+      <div class="preview-card">
+        <div class="preview-header">
+          <div>
+            <div style="font-size: 0.75rem; color: #9ca3af;">شماره پرونده</div>
+            <strong style="color: #fff; font-size: 1rem;">پ-۱۴۰۵-۰۱۸</strong>
+          </div>
+          <span class="badge badge-review">در پیگیری</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.9rem;">
+          <div><span style="color: #9ca3af;">پروژه:</span> ویلای دوبلکس لواسان</div>
+          <div><span style="color: #9ca3af;">کارفرما:</span> شرکت آکام سازه</div>
+          <div><span style="color: #9ca3af;">رشته:</span> محاسبات سازه</div>
+          <div style="margin-top: 0.35rem; padding: 0.6rem; background: rgba(0,0,0,0.25); border-radius: 0.4rem; font-size: 0.8rem; color: #e5e7eb;">
+            یادداشت: تاییدیه نقشه خاک دریافت شد؛ منتظر جلسه ناظر.
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 
-  <section class="features">
-    <div class="feature">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
-      <h3>پیگیری پرونده‌ها</h3>
+    <!-- تخصص‌ها (به‌صورت یکپارچه در کانتینر) -->
+  <div class="specialties-section">
+    <div class="container">
+      <div class="specialties-grid">
+        <span class="specialty-pill">معماری</span>
+        <span class="specialty-pill">محاسبات سازه</span>
+        <span class="specialty-pill">تأسیسات مکانیکی</span>
+        <span class="specialty-pill">تأسیسات برقی</span>
+        <span class="specialty-pill">نقشه‌برداری</span>
+        <span class="specialty-pill">شهرسازی</span>
+        <span class="specialty-pill">ترافیک</span>
+        <span class="specialty-pill">ژئوتکنیک</span>
+      </div>
     </div>
-    <div class="feature">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 22h20"/><path d="M4 22V6l8-4 8 4v16"/><path d="M9 22v-4h6v4"/><path d="M9 10h.01M15 10h.01M9 14h.01M15 14h.01"/></svg>
-      <h3>۸ تخصص طراحی و نظارت</h3>
-    </div>
-    <div class="feature">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
-      <h3>یادداشت و پشتیبان‌گیری محلی</h3>
+  </div>
+
+
+  <!-- ویژگی‌ها -->
+  <section class="section-padding" id="features">
+    <div class="container">
+      <div class="section-title">
+        <h2>میز کار تخصصی مهندسان</h2>
+        <p>بدون فرم‌های شلوغ؛ دقیقاً متناسب با جریان کاری دفاتر.</p>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-icon">⚡</div>
+          <h3>کاملاً آفلاین</h3>
+          <p>بدون ترس از قطعی اینترنت؛ برنامه روی حافظه مرورگر شما ذخیره شده و بی‌درنگ اجرا می‌شود.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🔒</div>
+          <h3>حریم شخصی کامل</h3>
+          <p>هیچ اطلاعاتی به سرور خارج فرستاده نمی‌شود. پروژه‌ها روی دستگاه شما باقی مانده و خروجی JSON دارد.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">📱</div>
+          <h3>نصب آسان PWA</h3>
+          <p>با یک کلیک، برنامه را به صفحه اصلی گوشی اندروید یا آیفون خود اضافه کنید.</p>
+        </div>
+      </div>
     </div>
   </section>
-</main>
 
-<footer>
-  <div class="credit">
-    طراح: <b>محمد مصلایی</b> — عضو سازمان نظام مهندسی قزوین — تلگرام: <a href="https://t.me/msli1976" style="color:var(--blue)" dir="ltr">@msli1976</a>
-  </div>
-  <div class="links">
-    <button data-modal="guideModal">راهنما</button>
-    <button data-modal="privacyModal">حریم خصوصی</button>
-  </div>
-</footer>
+  <!-- دموی زنده تعاملی -->
+  <section class="section-padding" id="demo" style="background-color: #ede6d8;">
+    <div class="container">
+      <div class="section-title">
+        <h2>پیش‌نمایش زنده پرونده‌ها</h2>
+        <p>روی هر پرونده کلیک کنید تا جزئیات را ببینید:</p>
+      </div>
 
-<!-- راهنما -->
-<div class="modal" id="guideModal">
-  <div class="modal-box">
-    <h2>راهنمای استفاده</h2>
-    <ul>
-      <li>روی دکمه «نصب برنامه» بزنید؛ در موبایل می‌توانید صفحه را با گزینه «Add to Home Screen» به‌صورت اپ نصب کنید.</li>
-      <li>در دسکتاپ، آیکن نصب در نوار آدرس مرورگر ظاهر می‌شود.</li>
-      <li>پس از اولین اجرا، برنامه بدون اینترنت هم کامل کار می‌کند.</li>
-      <li>برای هر پروژه می‌توانید پرونده، تخصص‌ها و یادداشت‌ها را ثبت و در نهایت خروجی JSON بگیرید.</li>
-      <li>پشتیبان‌گیری و بازیابی کاملاً محلی انجام می‌شود؛ فایل پشتیبان را در جای مطمئن نگه دارید.</li>
-    </ul>
-    <button class="modal-close" data-close>بستن</button>
-  </div>
-</div>
+      <div class="demo-container">
+        <div id="dossier-list" style="display: flex; flex-direction: column; gap: 0.5rem;"></div>
+        <div class="dossier-preview-box" id="dossier-details"></div>
+      </div>
+    </div>
+  </section>
 
-<!-- حریم خصوصی -->
-<div class="modal" id="privacyModal">
-  <div class="modal-box">
-    <h2>حریم خصوصی</h2>
-    <ul>
-      <li>تمام داده‌ها فقط در حافظه‌ی محلی مرورگر (localStorage) روی دستگاه خودتان ذخیره می‌شود.</li>
-      <li>هیچ اطلاعاتی به هیچ سروری ارسال یا همگام‌سازی نمی‌شود.</li>
-      <li>پاک‌کردن داده‌های مرورگر یا نصب مجدد مرورگر می‌تواند داده‌های محلی را حذف کند؛ به‌طور منظم خروجی JSON تهیه کنید.</li>
-      <li>این برنامه هیچ کوکی ردیابی، تبلیغ یا سرویس تحلیل خارجی ندارد.</li>
-    </ul>
-    <button class="modal-close" data-close>بستن</button>
-  </div>
-</div>
+  <!-- سوالات متداول -->
+  <section class="section-padding" id="faq">
+    <div class="container">
+      <div class="section-title">
+        <h2>پرسش‌های متداول</h2>
+      </div>
 
-<script>
+      <div class="faq-item open">
+        <div class="faq-question">آیا نیاز به اینترنت دارد؟ <span>▾</span></div>
+        <div class="faq-answer">خیر؛ پس از بارگذاری اولیه، تمام بخش‌ها به صورت کاملاً آفلاین کار می‌کنند.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">اطلاعات کجا ذخیره می‌شود؟ <span>▾</span></div>
+        <div class="faq-answer">در حافظه داخلی مرورگر (Local Storage) با قابلیت پشتیبان‌گیری فایل JSON.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- فوتر -->
+  <footer>
+    <div class="container">
+      <h4 style="color: #fff; margin-bottom: 0.5rem;">نقشه‌یار</h4>
+      <p style="font-size: 0.85rem; line-height: 1.7;">
+        توسعه توسط سید محمد مصلایی، سازمان نظام مهندسی قزوین.
+      </p>
+      <ul class="footer-links">
+        <li><a href="https://mosallaei1976.github.io/eng-project-tracker/">اجرای برنامه</a></li>
+        <li><a href="https://github.com/mosallaei1976/eng-project-tracker">مخزن گیت‌هاب</a></li>
+        <li><a href="https://t.me/msli1976">تلگرام</a></li>
+      </ul>
+      <div style="text-align: center; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1.5rem; font-size: 0.8rem;">
+        © ۱۴۰۵ — جامعه مهندسی کشور
+      </div>
+    </div>
+  </footer>
+
   <script>
-if ('serviceWorker' in navigator && location.protocol.startsWith('http'))
-  navigator.serviceWorker.register('sw.js').catch(() => {});
+    const DOSSIERS = [
+      {
+        id: '1',
+        code: 'پ-۱۴۰۵-۰۱۸',
+        title: 'ویلای دو طبقه لواسان',
+        client: 'مهندس حسینی',
+        field: 'محاسبات سازه',
+        status: 'در پیگیری',
+        statusClass: 'badge-review',
+        note: 'نقشه‌های سازه فلزی تایید شد. در انتظار تایید دفترچه محاسبات.'
+      },
+      {
+        id: '2',
+        code: 'پ-۱۴۰۵-۰۲۵',
+        title: 'مجتمع تجاری ستاره',
+        client: 'حاج‌قاسم نجفی',
+        field: 'معماری و نما',
+        status: 'نقص مدارک',
+        statusClass: 'badge-defect',
+        note: 'اصلاح شیب رمپ پارکینگ طبق مصوبه کمیسیون شهرداری الزامی است.'
+      }
+    ];
 
+    let activeId = '1';
 
+    function renderDossiers() {
+      const listEl = document.getElementById('dossier-list');
+      const detailsEl = document.getElementById('dossier-details');
 
-  
+      listEl.innerHTML = DOSSIERS.map(d => `
+        <div class="dossier-item ${d.id === activeId ? 'active' : ''}" onclick="selectDossier('${d.id}')">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.2rem;">
+            <strong style="font-size:0.9rem;">${d.title}</strong>
+            <span class="badge ${d.statusClass}">${d.status}</span>
+          </div>
+          <div style="font-size:0.75rem; color:var(--muted);">${d.code} • ${d.client}</div>
+        </div>
+      `).join('');
+
+      const activeItem = DOSSIERS.find(d => d.id === activeId);
+      detailsEl.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1rem;">
+          <div>
+            <h3 style="font-size:1.1rem; margin-bottom:0.15rem;">${activeItem.title}</h3>
+            <span style="font-size:0.75rem; color:var(--muted);">${activeItem.code}</span>
+          </div>
+          <span class="badge ${activeItem.statusClass}">${activeItem.status}</span>
+        </div>
+        <div style="font-size:0.85rem; margin-bottom:0.75rem; display:grid; gap:0.25rem;">
+          <div><strong style="color:var(--muted);">کارفرما:</strong> ${activeItem.client}</div>
+          <div><strong style="color:var(--muted);">رشته:</strong> ${activeItem.field}</div>
+        </div>
+        <div style="background:#fff; border:1px solid var(--line); border-radius:0.4rem; padding:0.75rem;">
+          <strong style="font-size:0.75rem; color:var(--copper); display:block; margin-bottom:0.25rem;">یادداشت کارگاهی:</strong>
+          <p style="font-size:0.85rem; color:var(--ink);">${activeItem.note}</p>
+        </div>
+      `;
+    }
+
+    function selectDossier(id) {
+      activeId = id;
+      renderDossiers();
+    }
+
+    document.querySelectorAll('.faq-question').forEach(q => {
+      q.addEventListener('click', () => {
+        q.parentElement.classList.toggle('open');
+      });
+    });
+
+    renderDossiers();
+  </script>
 </body>
 </html>
