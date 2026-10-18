@@ -3,7 +3,7 @@
   "name": "نقشه یار",
   "short_name": "نقشه‌یار",
   "description": "ثبت و مدیریت پروژه‌ها، شماره نقشه‌ها و یادداشت‌های کاری دفاتر مهندسی",
-  "start_url": "https://github.com/mosallaei1976/eng-project-tracker/blob/main/app.html",
+  "start_url": "./app.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
