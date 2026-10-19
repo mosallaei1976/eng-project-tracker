@@ -238,17 +238,34 @@
       padding: 1.5rem;
     }
 
+    .feature-heading {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.9rem;
+      min-height: 2.75rem;
+    }
+
     .card-icon {
       width: 2.5rem;
       height: 2.5rem;
+      flex: 0 0 2.5rem;
       background-color: var(--copper-soft);
       color: var(--copper);
       border-radius: 0.6rem;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       font-size: 1.25rem;
-      margin-bottom: 1rem;
+      line-height: 1;
+      margin: 0;
+    }
+
+    .feature-heading h3 {
+      min-width: 0;
+      margin: 0;
+      line-height: 1.45;
+      overflow-wrap: anywhere;
     }
 
     .card h3 {
@@ -467,21 +484,27 @@
 
       <div class="grid-3">
         <div class="card">
-          <div class="card-icon">⚡<h3>کاملاً آفلاین</h3></div>
-          
-          <p>بدون ترس از قطعی اینترنت؛ برنامه روی حافظه مرورگر شما ذخیره شده و بی‌درنگ اجرا می‌شود.</p>
+          <div class="feature-heading">
+            <span class="card-icon" aria-hidden="true">⚡</span>
+            <h3>کاملاً آفلاین</h3>
+          </div>
+          <p>پس از بارگذاری و ذخیره شدن فایل‌های برنامه، بدون اتصال اینترنت قابل استفاده است.</p>
         </div>
 
         <div class="card">
-          <div class="card-icon">🔒 <h3>حریم شخصی کامل</h3></div>
-          
-          <p>هیچ اطلاعاتی به سرور خارج فرستاده نمی‌شود. پروژه‌ها روی دستگاه شما باقی مانده و خروجی JSON دارد.</p>
+          <div class="feature-heading">
+            <span class="card-icon" aria-hidden="true">🔒</span>
+            <h3>حریم شخصی کامل</h3>
+          </div>
+          <p>اطلاعات پروژه‌ها در حافظه مرورگر همین دستگاه ذخیره می‌شوند و امکان تهیه نسخه پشتیبان JSON وجود دارد.</p>
         </div>
 
         <div class="card">
-          <div class="card-icon">  <h3>نصب آسان PWA</h3>📱</div>
-         
-          <p>با یک کلیک، برنامه را به صفحه اصلی گوشی اندروید یا آیفون خود اضافه کنید.</p>
+          <div class="feature-heading">
+            <span class="card-icon" aria-hidden="true">📱</span>
+            <h3>نصب آسان PWA</h3>
+          </div>
+          <p>برنامه را از مرورگر به صفحه اصلی گوشی اضافه کنید و مانند یک اپلیکیشن اجرا کنید؛ روش نصب به مرورگر و دستگاه بستگی دارد.</p>
         </div>
       </div>
     </div>
