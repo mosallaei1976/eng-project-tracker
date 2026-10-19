@@ -86,18 +86,14 @@
       color: inherit;
     }
 
-    .logo-badge {
-      width: 2.2rem;
-      height: 2.2rem;
-      background: var(--copper);
-      border-radius: 0.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 900;
-      color: #fff;
-      font-size: 1.1rem;
-    }
+  .logo-badge {
+  display: block;
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  flex: 0 0 40px;
+  border-radius: 10px;
+}
 
     .btn {
       display: inline-flex;
@@ -407,7 +403,13 @@
   <header>
     <div class="header-inner">
       <a href="#" class="logo-box">
-        <div class="logo-badge">ن</div>
+        <img
+  src="./icon-192.png"
+  alt="لوگوی نقشه‌یار"
+  class="logo-badge"
+  width="40"
+  height="40"
+>
         <div>
           <span style="font-weight: 800; font-size: 1.05rem; display: block;">نقشه‌یار</span>
           <span style="font-size: 0.7rem; color: #9ca3af;">دستیار دفاتر نظام مهندسی</span>
