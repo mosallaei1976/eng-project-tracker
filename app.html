@@ -185,10 +185,10 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
       <form id="customerForm" autocomplete="off">
         <input type="hidden" id="editCustomerId">
         <div class="form-group"><label class="form-label" for="fFullName">نام و نام خانوادگی:</label><input class="form-input" id="fFullName" placeholder="مثلاً: علی محمدی" required></div>
-        <div class="form-group"><label class="form-label" for="fOffice">نام دفتر مهندسی:</label><input class="form-input" id="fOffice" placeholder="مثلاً: دفتر مهندسی پارس" required></div>
+        <div class="form-group"><label class="form-label" for="fOffice">نام دفتر مهندسی:</label><input class="form-input" id="fOffice" placeholder="مثلاً: دفتر مهندسی پارس" ></div>
         <div class="form-row">
-          <div class="form-group"><label class="form-label" for="fMap">شماره نقشه:</label><input class="form-input ltr" id="fMap" placeholder="MAP-1042" required></div>
-          <div class="form-group"><label class="form-label" for="fPhone">موبایل مشتری:</label><input class="form-input ltr" id="fPhone" type="tel" inputmode="tel" placeholder="09123456789" required></div>
+          <div class="form-group"><label class="form-label" for="fMap">شماره نقشه:</label><input class="form-input ltr" id="fMap" placeholder="MAP-1042" ></div>
+          <div class="form-group"><label class="form-label" for="fPhone">موبایل مشتری:</label><input class="form-input ltr" id="fPhone" type="tel" inputmode="tel" placeholder="09123456789" ></div>
         </div>
         <div class="form-row">
           <div class="form-group"><label class="form-label" for="fCase">پرونده شهرداری:</label><input class="form-input ltr" id="fCase" placeholder="1403/9211"></div>
@@ -461,7 +461,7 @@ const F = { fullName:'fFullName', officeName:'fOffice', mapNumber:'fMap', phone:
 $('customerForm').addEventListener('submit', e => {
   e.preventDefault();
   const data = {}; for(const k in F) data[k] = $(F[k]).value.trim();
-  if(!data.fullName || !data.officeName || !data.mapNumber || !data.phone){ showToast('فیلدهای ضروری را تکمیل کنید.'); return; }
+  if(!data.fullName){ showToast('نام پروژه را وارد کنید.'); return; }
   const editId = $('editCustomerId').value;
   if(editId){ const c = customers.find(x => x.id===editId); if(!c){ showToast('پرونده برای ویرایش پیدا نشد.'); return; } Object.assign(c,data); }
   else{ customers.unshift({ id:'p_'+Date.now(), ...data, createdAt:Date.now(), notes:[] }); }
